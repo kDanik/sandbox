@@ -29,6 +29,14 @@ public class SandboxPixelRenderer : MonoBehaviour
         renderObject.transform.position = new Vector3(width * pixelSizeInUnityUnits / 2 - pixelSizeInUnityUnits / 2, height * pixelSizeInUnityUnits / 2 - pixelSizeInUnityUnits / 2, 1);
         renderObject.GetComponent<Renderer>().material.mainTexture = texture;
 
+        for(int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                texture.SetPixel(x, y, Color.clear);
+            }
+        }
+
         texture.Apply();
     }
 

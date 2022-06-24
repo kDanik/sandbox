@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Liquid : BaseElement
 {
-    public Liquid(int weight, int temperature, Color color) : base(weight, temperature, color)
+    public Liquid(uint weight, uint temperature, Color color) : base(weight, temperature, color)
     {
     }
 }

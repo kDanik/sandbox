@@ -128,7 +128,7 @@ public class ElementGridController : MonoBehaviour
                     int randomInt = Random.Range(0, 3);
                     if (randomInt == 1)
                     {
-                        elementGrid.SetElement(x, y, new GranularMaterial(0, 0, Color.black));
+                        elementGrid.SetElement(x, y, new Sand());
                     }
                     
                 }
