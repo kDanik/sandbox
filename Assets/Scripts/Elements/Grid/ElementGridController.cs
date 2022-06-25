@@ -138,6 +138,10 @@ public class ElementGridController : MonoBehaviour
                         {
                             elementGrid.SetElement(x, y, new Sand());
                         }
+                        if (elementChoosenTest == 2)
+                        {
+                            elementGrid.SetElement(x, y, new Stone());
+                        }
                     }
                     
                 }
