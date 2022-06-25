@@ -21,7 +21,7 @@ public class ElementPhysics : MonoBehaviour
 
     public void SimulateElementPhysics(int x, int y, BaseElement element)
     {
-        if (elementGrid.IsIgnorePosition(x, y)) return;
+        if (elementGrid.IsIgnorePosition(x, y) || element == null || element is Solid) return;
 
         if (element is GranularMaterial)
         {
