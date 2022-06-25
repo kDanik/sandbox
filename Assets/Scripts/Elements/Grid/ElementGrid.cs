@@ -169,6 +169,11 @@ public class ElementGrid
         CheckNextFrame.Add((x + 1, y + 1));
     }
 
+    public void AddPositionToCheckNextFrame(int x, int y)
+    {
+        CheckNextFrame.Add((x, y));
+    }
+
     // TODO I should how big is performance boost if i use inline checks instead 
     public bool IsInBounds(int x, int y)
     {

@@ -9,11 +9,14 @@ public class ElementPhysics : MonoBehaviour
 
     private GranularPhysics granularPhysics;
 
+    private LiquidPhysics liquidPhysics;
+
     public void InitElementPhysics(ElementGrid elementGrid)
     {
         this.elementGrid = elementGrid;
 
         granularPhysics = new GranularPhysics(elementGrid);
+        liquidPhysics = new LiquidPhysics(elementGrid);
     }
 
     public void SimulateElementPhysics(int x, int y, BaseElement element)
@@ -23,7 +26,15 @@ public class ElementPhysics : MonoBehaviour
         if (element is GranularMaterial)
         {
             granularPhysics.Simulate(x, y);
+            return;
         }
+
+        if (element is Liquid liquidElement)
+        {
+            liquidPhysics.Simulate(x, y, liquidElement);
+            return;
+        }
+
     }
 
 }

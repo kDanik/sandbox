@@ -14,6 +14,9 @@ public class ElementGridController : MonoBehaviour
     [SerializeField]
     private int height = 600;
 
+    [SerializeField]
+    private int elementChoosenTest = 1;
+
     private ElementGrid elementGrid;
 
     void Start()
@@ -128,7 +131,13 @@ public class ElementGridController : MonoBehaviour
                     int randomInt = Random.Range(0, 3);
                     if (randomInt == 1)
                     {
-                        elementGrid.SetElement(x, y, new Sand());
+                        if (elementChoosenTest == 1) {
+                            elementGrid.SetElement(x, y, new Water());
+                        }
+                        if (elementChoosenTest == 0)
+                        {
+                            elementGrid.SetElement(x, y, new Sand());
+                        }
                     }
                     
                 }

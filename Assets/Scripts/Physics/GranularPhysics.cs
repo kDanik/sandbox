@@ -88,7 +88,7 @@ public class GranularPhysics
     // for granular material swappable elements would be liquids and gasses or empty space
     private bool IsSwappableElement(int x, int y)
     {
-        return elementGrid.IsInBounds(x, y) && !elementGrid.ElementPresent(x, y);
+        return elementGrid.IsInBounds(x, y) && (elementGrid.GetElement(x, y) == null || elementGrid.GetElement(x, y) is Liquid);
     }
 
 }
