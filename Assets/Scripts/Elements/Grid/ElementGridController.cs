@@ -19,6 +19,8 @@ public class ElementGridController : MonoBehaviour
 
     private ElementGrid elementGrid;
 
+    private ElementSpawner elementSpawner;
+
     void Start()
     {
         sandboxPixelRenderer = this.gameObject.GetComponent<SandboxPixelRenderer>();
@@ -29,7 +31,7 @@ public class ElementGridController : MonoBehaviour
         elementPhysics = this.gameObject.GetComponent<ElementPhysics>();
         elementPhysics.InitElementPhysics(elementGrid);
 
-
+        elementSpawner = new ElementSpawner(elementGrid);
 
         sandboxPixelRenderer.ApplyCurrentChangesToTexture();
     }
@@ -40,10 +42,10 @@ public class ElementGridController : MonoBehaviour
         var checkThisFrame = elementGrid.CollectCheckNextFramePosition();
         // ONLY TEST METHOD
 
-        var randomRange = Random.Range(0, 2);
+        int randomRange = Random.Range(0, 2);
 
         if(randomRange == 1)
-                {
+        {
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
@@ -60,22 +62,22 @@ public class ElementGridController : MonoBehaviour
                 }
             }
         }
-        if (randomRange == 0)
+        else
         {
             for (int y = 0; y < height; y++)
-        {
-            for (int x = width; x >= 0; x--)
             {
+                for (int x = width; x >= 0; x--)
+                {
 
 
-                if (!checkThisFrame.Contains((x, y))) continue;
+                    if (!checkThisFrame.Contains((x, y))) continue;
 
-                BaseElement element = elementGrid.GetElement(x, y);
+                    BaseElement element = elementGrid.GetElement(x, y);
 
-                if (element == null) continue;
+                    if (element == null) continue;
 
-                elementPhysics.SimulateElementPhysics(x, y, element);
-            }
+                    elementPhysics.SimulateElementPhysics(x, y, element);
+                }
             }
         }
 
@@ -122,31 +124,22 @@ public class ElementGridController : MonoBehaviour
         inputPositions = GetWindowsInput();
         foreach (Vector2Int posInGrid in inputPositions)
         {
-
-            for (int x = posInGrid.x - 10; x <= posInGrid.x + 10; x++)
+            if (elementChoosenTest == 0)
             {
-                for (int y = posInGrid.y - 10; y <= posInGrid.y + 10; y++)
-                {
-
-                    int randomInt = Random.Range(0, 3);
-                    if (randomInt == 1)
-                    {
-                        if (elementChoosenTest == 1) {
-                            elementGrid.SetElement(x, y, new Water());
-                        }
-                        if (elementChoosenTest == 0)
-                        {
-                            elementGrid.SetElement(x, y, new Sand());
-                        }
-                        if (elementChoosenTest == 2)
-                        {
-                            elementGrid.SetElement(x, y, new Stone());
-                        }
-                    }
-                    
-                }
+                elementSpawner.Clear(posInGrid.x, posInGrid.y, new QuadSolidBrush());
             }
-
+            if (elementChoosenTest == 1)
+            {
+                elementSpawner.SpawnElement<Water>(posInGrid.x, posInGrid.y, new QuadSolidBrush());
+            }
+            if (elementChoosenTest == 2)
+            {
+                elementSpawner.SpawnElement<Sand>(posInGrid.x, posInGrid.y, new QuadSolidBrush());
+            }
+            if (elementChoosenTest == 3)
+            {
+                elementSpawner.SpawnElement<Stone>(posInGrid.x, posInGrid.y, new QuadSolidBrush());
+            }
         }
     }
 }
