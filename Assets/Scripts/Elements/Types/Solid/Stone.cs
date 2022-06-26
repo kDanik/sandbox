@@ -2,7 +2,7 @@
 
 public class Stone : Solid
 {
-    public Stone() : base(1540, RoomTemperature, CreateRandomStoneColor())
+    public Stone() : base(3000, RoomTemperature, CreateRandomStoneColor())
     {
     }
 
