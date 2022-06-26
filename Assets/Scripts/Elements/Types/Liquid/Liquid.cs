@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Liquid : BaseElement
@@ -10,7 +8,8 @@ public class Liquid : BaseElement
     {
     }
 
-    public void SwitchFlowDirection() {
+    public void SwitchFlowDirection()
+    {
         // switches liquid flow direction to oposite one
         flowDirection = 1 - flowDirection;
     }
@@ -27,7 +26,8 @@ public class Liquid : BaseElement
         flowDirection = 0;
     }
 
-    public bool IsFlowDirectionRight() {
+    public bool IsFlowDirectionRight()
+    {
         return flowDirection == 1;
     }
 }

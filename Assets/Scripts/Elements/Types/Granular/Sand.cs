@@ -1,6 +1,4 @@
-﻿using System;
-using UnityEngine;
-using Random = UnityEngine.Random;
+﻿using UnityEngine;
 
 public class Sand : GranularMaterial
 {
@@ -8,7 +6,8 @@ public class Sand : GranularMaterial
     {
     }
 
-    private static Color CreateRandomSandColor() {
+    private static Color CreateRandomSandColor()
+    {
         float red = Random.Range(0.78f, 0.94f);
         float green = Random.Range(0.78f, 0.94f);
         float blue = Random.Range(0.45f, 0.60f);

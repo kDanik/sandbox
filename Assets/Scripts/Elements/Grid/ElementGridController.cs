@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -44,13 +43,13 @@ public class ElementGridController : MonoBehaviour
 
         int randomRange = Random.Range(0, 2);
 
-        if(randomRange == 1)
+        if (randomRange == 1)
         {
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
                 {
-           
+
 
                     if (!checkThisFrame.Contains((x, y))) continue;
 
@@ -117,7 +116,7 @@ public class ElementGridController : MonoBehaviour
         return output;
     }
     public void SpawnBlocks()
-    {  
+    {
         // ONLY TEST METHOD
         List<Vector2Int> inputPositions = new List<Vector2Int>();
 

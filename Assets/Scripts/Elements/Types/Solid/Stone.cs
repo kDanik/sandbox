@@ -6,9 +6,8 @@ public class Stone : Solid
     {
     }
 
-    private static Color CreateRandomStoneColor() {
-
-
+    private static Color CreateRandomStoneColor()
+    {
         float allColorValues = Random.Range(0.4f, 0.70f);
         float alpha = 1;
 

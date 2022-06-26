@@ -6,7 +6,7 @@ public class GranularPhysics
 {   
     private static readonly bool directionLeft = true;
 
-   // private static readonly bool directionRight = false;
+    // private static readonly bool directionRight = false;
 
     private ElementGrid elementGrid;
 

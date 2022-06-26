@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
 
 // IMPORTANT!
@@ -10,7 +9,7 @@ using System.Linq;
 // some methods in this class look like they could be simplified by using each other,
 // but they are so ugly for performance reasons, to avoid double check
 // IMPORTANT!
-public class ElementGrid 
+public class ElementGrid
 {
     private BaseElement[,] elementGrid;
 
@@ -20,7 +19,7 @@ public class ElementGrid
 
     private int width;
 
-    
+
     // list with positions that changed is some form this frame(or their neighbors), and should be checked next frame
     // and should be checked by physics class or some other class next frame
 
@@ -46,10 +45,10 @@ public class ElementGrid
         var buffer = new HashSet<(int x, int y)>(CheckNextFrame);
 
         CheckNextFrame.Clear();
-        
+
         return buffer;
     }
-    
+
     public bool IsIgnorePosition(int x, int y)
     {
         return IgnoreThisFrame.Contains((x, y));

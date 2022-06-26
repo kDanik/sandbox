@@ -16,10 +16,12 @@ public class LiquidPhysics
         SimulateLiquidFlow(x, y, element);
     }
 
-    private void SimulateLiquidFlow(int x, int y, Liquid element) {
+    private void SimulateLiquidFlow(int x, int y, Liquid element)
+    {
         if (element.IsFlowDirectionRight())
         {
-            if (TrySwapWithBottomRightElement(x, y)) {
+            if (TrySwapWithBottomRightElement(x, y))
+            {
                 x++;
                 y--;
             }
@@ -30,7 +32,8 @@ public class LiquidPhysics
 
             if (IsSwappableElement(x - 1, y)) elementGrid.AddPositionToCheckNextFrame(x, y);
 
-        } else
+        }
+        else
         {
             if (TrySwapWithBottomLeftElement(x, y))
             {
@@ -80,7 +83,7 @@ public class LiquidPhysics
         }
 
         if (!IsSwappableElement(x - 1, y)) return false;
-       
+
         elementGrid.SwapElements(x, y, x - 1, y);
 
         return true;
@@ -89,7 +92,8 @@ public class LiquidPhysics
     {
         if (IsSwappableElement(x + 2, y))
         {
-            if (IsSwappableElement(x + 2, y - 1)) {
+            if (IsSwappableElement(x + 2, y - 1))
+            {
                 elementGrid.SwapElements(x, y, x + 2, y - 1);
             }
             else
