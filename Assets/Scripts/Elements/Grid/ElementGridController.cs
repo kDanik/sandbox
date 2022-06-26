@@ -139,6 +139,10 @@ public class ElementGridController : MonoBehaviour
             {
                 elementSpawner.SpawnElement<Stone>(posInGrid.x, posInGrid.y, new QuadSolidBrush());
             }
+            if (elementChoosenTest == 4)
+            {
+                elementSpawner.SpawnElement<Oil>(posInGrid.x, posInGrid.y, new QuadSolidBrush());
+            }
         }
     }
 }
