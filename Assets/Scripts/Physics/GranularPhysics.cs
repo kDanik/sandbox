@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GranularPhysics
-{   
+{
     private static readonly bool directionLeft = true;
 
     // private static readonly bool directionRight = false;
@@ -18,14 +18,24 @@ public class GranularPhysics
 
     public void Simulate(int x, int y)
     {
-        if (TrySwapWithBottomElement(x, y)) return;
+
+        if (TrySwapWithBottomElement(x, y))
+        {   
+            y--;
+            if (TrySwapWithBottomElement(x, y))
+            {
+                y--;
+            }
+        }
+
+        if (IsSwappableElement(x, y - 1)) return;
 
 
         if (direction.Equals(directionLeft))
         {
             SwitchDirection();
 
-            if (TrySwapWithBottomLeftElement(x, y)) return;
+            if (TrySwapWithBottomLeftElement(x, y) && TrySwapWithBottomLeftElement(x - 1, y - 1)) return;
 
             if (TrySwapWithBottomRightElement(x, y)) return;
         }
@@ -33,7 +43,7 @@ public class GranularPhysics
         {
             SwitchDirection();
 
-            if (TrySwapWithBottomRightElement(x, y)) return;
+            if (TrySwapWithBottomRightElement(x, y) && TrySwapWithBottomRightElement(x + 1, y - 1)) return;
 
             if (TrySwapWithBottomLeftElement(x, y)) return;
         }
@@ -44,18 +54,8 @@ public class GranularPhysics
         direction = !direction;
     }
 
-    private bool TrySwapWithBottomElement(int x,int y)
+    private bool TrySwapWithBottomElement(int x, int y)
     {
-
-
-        if (IsSwappableElement(x, y - 2))
-        {
-            elementGrid.SwapElements(x, y, x, y - 2);
-
-            return true;
-        }
-
-
         if (!IsSwappableElement(x, y - 1)) return false;
 
         elementGrid.SwapElements(x, y, x, y - 1);
@@ -65,22 +65,18 @@ public class GranularPhysics
 
     private bool TrySwapWithBottomLeftElement(int x, int y)
     {
-        if (!IsSwappableElement(x - 1, y - 1)) return false;
+        if (!IsSwappableElement(x - 1, y - 1) || !IsSwappableElement(x - 1, y)) return false;
 
         elementGrid.SwapElements(x, y, x - 1, y - 1);
-
-        TrySwapWithBottomElement(x - 1, y - 1);
 
         return true;
     }
 
     private bool TrySwapWithBottomRightElement(int x, int y)
     {
-        if (!IsSwappableElement(x + 1, y - 1)) return false;
+        if (!IsSwappableElement(x + 1, y - 1) || !IsSwappableElement(x + 1, y)) return false;
 
         elementGrid.SwapElements(x, y, x + 1, y - 1);
-
-        TrySwapWithBottomElement(x + 1, y - 1);
 
         return true;
     }
@@ -91,4 +87,8 @@ public class GranularPhysics
         return elementGrid.IsInBounds(x, y) && (elementGrid.GetElement(x, y) == null || elementGrid.GetElement(x, y) is Liquid);
     }
 
+    private bool isLiquidElement(int x, int y)
+    {
+        return elementGrid.GetElement(x, y) is Liquid;
+    }
 }
