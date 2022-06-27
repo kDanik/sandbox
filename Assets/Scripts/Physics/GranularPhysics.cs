@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class GranularPhysics
 {
-    private static readonly bool directionLeft = true;
-
-    // private static readonly bool directionRight = false;
-
     private ElementGrid elementGrid;
 
+    // true value is left direction, false is right direction
+    private static readonly bool directionLeft = true;
+
+    // direction to check first for physics calculation.
+    // Exists to prevent physics calculation favoring one direction
     private bool direction = true;
+
     public GranularPhysics(ElementGrid elementGrid)
     {
         this.elementGrid = elementGrid;
@@ -18,15 +20,10 @@ public class GranularPhysics
 
     public void Simulate(int x, int y)
     {
+        TrySwapWithBottomElement(ref x, ref y);
 
-        if (TrySwapWithBottomElement(x, y))
-        {   
-            y--;
-            if (TrySwapWithBottomElement(x, y))
-            {
-                y--;
-            }
-        }
+        TrySwapWithBottomElement(ref x, ref y);
+
 
         if (IsSwappableElement(x, y - 1)) return;
 
@@ -35,17 +32,17 @@ public class GranularPhysics
         {
             SwitchDirection();
 
-            if (TrySwapWithBottomLeftElement(x, y) && TrySwapWithBottomLeftElement(x - 1, y - 1)) return;
+            if (TrySwapWithBottomLeftElement(ref x,ref y) && TrySwapWithBottomLeftElement(ref x, ref y)) return;
 
-            if (TrySwapWithBottomRightElement(x, y)) return;
+            if (TrySwapWithBottomRightElement(ref x, ref y)) return;
         }
         else
         {
             SwitchDirection();
 
-            if (TrySwapWithBottomRightElement(x, y) && TrySwapWithBottomRightElement(x + 1, y - 1)) return;
+            if (TrySwapWithBottomRightElement(ref x,ref y) && TrySwapWithBottomRightElement(ref x, ref y)) return;
 
-            if (TrySwapWithBottomLeftElement(x, y)) return;
+            if (TrySwapWithBottomLeftElement(ref x, ref y)) return;
         }
     }
 
@@ -54,29 +51,40 @@ public class GranularPhysics
         direction = !direction;
     }
 
-    private bool TrySwapWithBottomElement(int x, int y)
+    // Tries to swap with bottom element
+    // on success updates position (x, y) and returns true
+    private bool TrySwapWithBottomElement(ref int x, ref int y)
     {
         if (!IsSwappableElement(x, y - 1)) return false;
 
         elementGrid.SwapElements(x, y, x, y - 1);
+        y--;
 
         return true;
     }
 
-    private bool TrySwapWithBottomLeftElement(int x, int y)
+    // Tries to swap with bottom left element
+    // on success updates position (x, y) and returns true
+    private bool TrySwapWithBottomLeftElement(ref int x, ref int y)
     {
         if (!IsSwappableElement(x - 1, y - 1) || !IsSwappableElement(x - 1, y)) return false;
 
         elementGrid.SwapElements(x, y, x - 1, y - 1);
+        y--;
+        x--;
 
         return true;
     }
 
-    private bool TrySwapWithBottomRightElement(int x, int y)
+    // Tries to swap with bottom right element
+    // on success updates position (x, y) and returns true
+    private bool TrySwapWithBottomRightElement(ref int x, ref int y)
     {
         if (!IsSwappableElement(x + 1, y - 1) || !IsSwappableElement(x + 1, y)) return false;
 
         elementGrid.SwapElements(x, y, x + 1, y - 1);
+        y--;
+        x++;
 
         return true;
     }
