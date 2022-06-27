@@ -10,7 +10,7 @@
 
     public void Simulate(int x, int y, Liquid element)
     {
-        if (TrySwapWithBottomElement(x, y, element)) return;
+        if (TrySwapWithBottomElement(ref x, ref y, element) && TrySwapWithBottomElement(ref x, ref y, element)) return;
 
         SimulateLiquidFlow(x, y, element);
     }
@@ -19,41 +19,40 @@
     {
         if (element.IsFlowDirectionRight())
         {
-            if (TrySwapWithBottomRightElement(x, y, element))
-            {
-                x++;
-                y--;
-            }
 
-            if (TrySwapWithRightElement(x, y, element)) return;
+            TrySwapWithRightElement(ref x, ref y, element);
+            TrySwapWithBottomElement(ref x, ref y, element);
+            TrySwapWithRightElement(ref x, ref y, element);
+
+            if (TrySwapWithRightElement(ref x, ref y, element)) return;
 
             element.SwitchFlowDirectionToLeft();
 
-            if (IsSwappableElement(x - 1, y, element)) elementGrid.AddPositionToCheckNextFrame(x, y);
+            if (IsSwappableElement(x - 1, y, element)) elementGrid.AddPositionToCheckNextIteration(x, y);
 
         }
         else
         {
-            if (TrySwapWithBottomLeftElement(x, y, element))
-            {
-                x--;
-                y--;
-            }
+            TrySwapWithLeftElement(ref x, ref y, element);
+            TrySwapWithBottomElement(ref x, ref y, element);
+            TrySwapWithLeftElement(ref x, ref y, element);
 
-            if (TrySwapWithLeftElement(x, y, element)) return;
+
+            if (TrySwapWithLeftElement(ref x, ref y, element)) return;
 
             element.SwitchFlowDirectionToRight();
 
-            if (IsSwappableElement(x + 1, y, element)) elementGrid.AddPositionToCheckNextFrame(x, y);
+            if (IsSwappableElement(x + 1, y, element)) elementGrid.AddPositionToCheckNextIteration(x, y);
 
         }
     }
 
-    private bool TrySwapWithBottomElement(int x, int y, Liquid element)
+    private bool TrySwapWithBottomElement(ref int x, ref int y, Liquid element)
     {
         if (IsSwappableElement(x, y - 2, element))
         {
             elementGrid.SwapElements(x, y, x, y - 2);
+            y -= 2;
 
             return true;
         }
@@ -62,71 +61,82 @@
         if (!IsSwappableElement(x, y - 1, element)) return false;
 
         elementGrid.SwapElements(x, y, x, y - 1);
+        y -= 1;
 
         return true;
     }
-    private bool TrySwapWithLeftElement(int x, int y, Liquid element)
+    private bool TrySwapWithLeftElement(ref int x, ref int y, Liquid element)
     {
-        if (IsSwappableElement(x - 2, y, element))
+
+        if (!IsSwappableElement(x - 1, y, element))
         {
-            if (IsSwappableElement(x - 2, y - 1, element))
+            return false;
+        }
+
+        if (!IsSwappableElement(x - 2, y, element))
+        {
+            if (IsSwappableElement(x - 1, y - 1, element))
             {
-                elementGrid.SwapElements(x, y, x - 2, y - 1);
+                elementGrid.SwapElements(x, y, x - 1, y - 1);
+                x--;
+                y--;
             }
             else
             {
-                elementGrid.SwapElements(x, y, x - 2, y);
+                elementGrid.SwapElements(x, y, x - 1, y);
+                x--;
             }
-
             return true;
         }
 
-        if (!IsSwappableElement(x - 1, y, element)) return false;
 
-        elementGrid.SwapElements(x, y, x - 1, y);
+        if (IsSwappableElement(x - 2, y - 1, element))
+        {
+            elementGrid.SwapElements(x, y, x - 2, y - 1);
+            x -= 2;
+            y--;
+        }
+        else
+        {
+            elementGrid.SwapElements(x, y, x - 2, y);
+            x -= 2;
+        }
 
         return true;
     }
-    private bool TrySwapWithRightElement(int x, int y, Liquid element)
+
+    private bool TrySwapWithRightElement(ref int x,ref int y, Liquid element)
     {
-        if (IsSwappableElement(x + 2, y, element))
-        {
-            if (IsSwappableElement(x + 2, y - 1, element))
-            {
-                elementGrid.SwapElements(x, y, x + 2, y - 1);
-            }
-            else
-            {
-                elementGrid.SwapElements(x, y, x + 2, y);
-            }
-
-            return true;
-        }
-
         if (!IsSwappableElement(x + 1, y, element)) return false;
 
-        elementGrid.SwapElements(x, y, x + 1, y);
+        if (!IsSwappableElement(x + 2, y, element))
+        {
+            if (IsSwappableElement(x + 1, y - 1, element))
+            {
+                elementGrid.SwapElements(x, y, x + 1, y - 1);
+                x++;
+                y--;
+            }
+            else
+            {
+                elementGrid.SwapElements(x, y, x + 1, y);
+                x++;
+            }
+            return true;
+        }
 
-        return true;
-    }
-    private bool TrySwapWithBottomLeftElement(int x, int y, Liquid element)
-    {
-        if (!IsSwappableElement(x - 1, y - 1, element)) return false;
 
-        elementGrid.SwapElements(x, y, x - 1, y - 1);
-
-        TrySwapWithBottomElement(x - 1, y - 1, element);
-
-        return true;
-    }
-
-    private bool TrySwapWithBottomRightElement(int x, int y, Liquid element)
-    {
-        if (!IsSwappableElement(x + 1, y - 1, element)) return false;
-
-        elementGrid.SwapElements(x, y, x + 1, y - 1);
-
-        TrySwapWithBottomElement(x + 1, y - 1, element);
+        if (IsSwappableElement(x + 2, y - 1, element))
+        {
+            elementGrid.SwapElements(x, y, x + 2, y - 1);
+            x += 2;
+            y--;
+        }
+        else
+        {
+            elementGrid.SwapElements(x, y, x + 2, y);
+            x += 2;
+        }
 
         return true;
     }
