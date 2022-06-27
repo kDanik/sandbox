@@ -86,9 +86,4 @@ public class GranularPhysics
     {
         return elementGrid.IsInBounds(x, y) && (elementGrid.GetElement(x, y) == null || elementGrid.GetElement(x, y) is Liquid);
     }
-
-    private bool isLiquidElement(int x, int y)
-    {
-        return elementGrid.GetElement(x, y) is Liquid;
-    }
 }

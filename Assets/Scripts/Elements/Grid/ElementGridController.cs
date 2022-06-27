@@ -38,7 +38,7 @@ public class ElementGridController : MonoBehaviour
     // this part should refactored and put in another class
     void FixedUpdate()
     {
-        var checkThisFrame = elementGrid.CollectCheckNextFramePosition();
+        var checkThisFrame = elementGrid.CollectCheckNextIterationPosition();
         // ONLY TEST METHOD
 
         int randomRange = Random.Range(0, 2);
@@ -87,7 +87,7 @@ public class ElementGridController : MonoBehaviour
             SpawnBlocks();
         }
 
-        elementGrid.ClearIgnoreThisFramePositionsList();
+        elementGrid.ClearIgnoreThisIterationPositionsList();
         sandboxPixelRenderer.ApplyCurrentChangesToTexture();
     }
 

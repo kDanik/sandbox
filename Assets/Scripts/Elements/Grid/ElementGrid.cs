@@ -20,15 +20,15 @@ public class ElementGrid
     private int width;
 
 
-    // list with positions that changed is some form this frame(or their neighbors), and should be checked next frame
-    // and should be checked by physics class or some other class next frame
+    // list with positions that changed is some form this iteration(or their neighbors), and should be checked next iteration
+    // and should be checked by physics class or some other class next iteration
 
-    private HashSet<(int x, int y)> CheckNextFrame = new HashSet<(int x, int y)>();
+    private HashSet<(int x, int y)> checkNextIteration = new HashSet<(int x, int y)>();
 
 
     // list with positions that were already checked by physics calculations
-    // and should be ignored this frame
-    private HashSet<(int x, int y)> IgnoreThisFrame = new HashSet<(int x, int y)>();
+    // and should be ignored this iteration
+    private HashSet<(int x, int y)> ignoreThisIteration = new HashSet<(int x, int y)>();
 
     public ElementGrid(int width, int height, SandboxPixelRenderer sandboxPixelRenderer)
     {
@@ -39,24 +39,26 @@ public class ElementGrid
         elementGrid = new BaseElement[width, height];
     }
 
-    // returns positionsChangedThisFrame as array and clears it
-    public HashSet<(int x, int y)> CollectCheckNextFramePosition()
+    // returns positionsChangedThisIteration as array and clears it
+    public HashSet<(int x, int y)> CollectCheckNextIterationPosition()
     {
-        var buffer = new HashSet<(int x, int y)>(CheckNextFrame);
+        var buffer = new HashSet<(int x, int y)>(checkNextIteration);
 
-        CheckNextFrame.Clear();
+        checkNextIteration.Clear();
 
         return buffer;
     }
 
+    // returns true if position is in ignore list for this iteration
     public bool IsIgnorePosition(int x, int y)
     {
-        return IgnoreThisFrame.Contains((x, y));
+        return ignoreThisIteration.Contains((x, y));
     }
 
-    public void ClearIgnoreThisFramePositionsList()
+    // fully clears list of ignore positions for this iteration
+    public void ClearIgnoreThisIterationPositionsList()
     {
-        IgnoreThisFrame.Clear();
+        ignoreThisIteration.Clear();
     }
 
     // swaps 2 elements if both are in bound. Also works if one of elements is null
@@ -68,17 +70,17 @@ public class ElementGrid
             elementGrid[x2, y2] = elementGrid[x1, y1];
             elementGrid[x1, y1] = buff;
 
-            IgnoreThisFrame.Add((x1, y1));
-            IgnoreThisFrame.Add((x2, y2));
-            AddSuroundingPositionsToCheckNextFrame(x1, y1);
-            AddSuroundingPositionsToCheckNextFrame(x2, y2);
+            ignoreThisIteration.Add((x1, y1));
+            ignoreThisIteration.Add((x2, y2));
+            AddSuroundingPositionsToCheckNextIteration(x1, y1);
+            AddSuroundingPositionsToCheckNextIteration(x2, y2);
 
             UpdateColorValues(x2, y2);
             UpdateColorValues(x1, y1);
         }
     }
 
-    // returns BaseElement for given position if in bounds, otherwise returns null
+    // returns element for given position if in bounds, otherwise returns null
     public BaseElement GetElement(int x, int y)
     {
         if (IsInBounds(x, y))
@@ -91,40 +93,36 @@ public class ElementGrid
         }
     }
 
-
-    // sets element and updates pixel color for it,
-    // if position is in bounds and no other BaseElement is assigned for it
+    // if position is in bounds and no other element is assigned for it,  sets element and updates pixel color for it
     public void SetElementIfEmpty(int x, int y, BaseElement element)
     {
         if (!ElementPresent(x, y))
         {
             elementGrid[x, y] = element;
 
-            IgnoreThisFrame.Add((x, y));
-            AddSuroundingPositionsToCheckNextFrame(x, y);
+            ignoreThisIteration.Add((x, y));
+            AddSuroundingPositionsToCheckNextIteration(x, y);
 
             UpdateColorValues(x, y);
         }
     }
 
-
-    // sets element and updates pixel color for it,
-    // if position is in bounds
+    // if position is in bounds, sets element and updates pixel color for it,
     public void SetElement(int x, int y, BaseElement element)
     {
         if (IsInBounds(x, y))
         {
             elementGrid[x, y] = element;
 
-            IgnoreThisFrame.Add((x, y));
-            AddSuroundingPositionsToCheckNextFrame(x, y);
+            ignoreThisIteration.Add((x, y));
+            AddSuroundingPositionsToCheckNextIteration(x, y);
 
             UpdateColorValues(x, y);
         }
     }
 
-    // update sandboxPixelRenderer pixel for given position
-    private void UpdateColorValues(int x, int y)
+    // Updates sandboxPixelRenderer pixel for given position
+    public void UpdateColorValues(int x, int y)
     {
 
         BaseElement element = GetElement(x, y);
@@ -135,50 +133,49 @@ public class ElementGrid
         sandboxPixelRenderer.SetPixel(x, y, color);
     }
 
+    // Returns true if position is in bounds of the grid and there is no element present
     public bool IsInBoundsAndEmpty(int x, int y)
     {
         return x >= 0 && y >= 0 && x < width && y < height && elementGrid[x, y] == null;
     }
 
 
-    // adds all surounding positions to positionsChangedThisFrame
-    public void AddSuroundingPositionsToCheckNextFrame(int x, int y)
+    // Adds all surounding positions to positionsChangedThisIteration, so their physics calculated next iteration
+    public void AddSuroundingPositionsToCheckNextIteration(int x, int y)
     {
-        CheckNextFrame.Add((x, y));
-
+        // center
+        checkNextIteration.Add((x, y));
         // bottom
-        CheckNextFrame.Add((x, y - 1));
-
+        checkNextIteration.Add((x, y - 1));
         // left
-        CheckNextFrame.Add((x - 1, y));
+        checkNextIteration.Add((x - 1, y));
         // up
-        CheckNextFrame.Add((x, y + 1));
+        checkNextIteration.Add((x, y + 1));
         // right
-        CheckNextFrame.Add((x + 1, y));
-
+        checkNextIteration.Add((x + 1, y));
         // left up
-        CheckNextFrame.Add((x - 1, y + 1));
+        checkNextIteration.Add((x - 1, y + 1));
         // right down
-        CheckNextFrame.Add((x + 1, y - 1));
-
+        checkNextIteration.Add((x + 1, y - 1));
         // left bottom
-        CheckNextFrame.Add((x - 1, y - 1));
-
+        checkNextIteration.Add((x - 1, y - 1));
         // top right
-        CheckNextFrame.Add((x + 1, y + 1));
+        checkNextIteration.Add((x + 1, y + 1));
     }
 
-    public void AddPositionToCheckNextFrame(int x, int y)
+    // Adds one position to positionsChangedThisIteration, so it's physics calculated next iteration
+    public void AddPositionToCheckNextIteration(int x, int y)
     {
-        CheckNextFrame.Add((x, y));
+        checkNextIteration.Add((x, y));
     }
 
-    // TODO I should how big is performance boost if i use inline checks instead 
+    // Returns true if position is in bounds of the grid
     public bool IsInBounds(int x, int y)
     {
         return x >= 0 && y >= 0 && x < width && y < height;
     }
 
+    // Returns true if position is in bounds of the grid and there is element present
     public bool ElementPresent(int x, int y)
     {
         return IsInBounds(x, y) && elementGrid[x, y] != null;
