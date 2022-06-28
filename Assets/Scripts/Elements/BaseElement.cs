@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class BaseElement
 {
+    // maybe element id/name and it's type should be added here to improve performance by far by reducing ammount of casting needed
+    
     // Unit Weight (Kg/m3)
     public uint weight;
 

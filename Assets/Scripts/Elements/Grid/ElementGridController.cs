@@ -143,6 +143,10 @@ public class ElementGridController : MonoBehaviour
             {
                 elementSpawner.SpawnElement<Oil>(posInGrid.x, posInGrid.y, new QuadSolidBrush());
             }
+            if (elementChoosenTest == 5)
+            {
+                elementSpawner.SpawnElement<Methane>(posInGrid.x, posInGrid.y, new QuadSolidBrush());
+            }
         }
     }
 }

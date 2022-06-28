@@ -9,12 +9,15 @@ public class ElementPhysics : MonoBehaviour
 
     private LiquidPhysics liquidPhysics;
 
+    private GasPhysics gasPhysics;
+
     public void InitElementPhysics(ElementGrid elementGrid)
     {
         this.elementGrid = elementGrid;
 
         granularPhysics = new GranularPhysics(elementGrid);
         liquidPhysics = new LiquidPhysics(elementGrid);
+        gasPhysics = new GasPhysics(elementGrid);
     }
 
     public void SimulateElementPhysics(int x, int y, BaseElement element)
@@ -33,6 +36,12 @@ public class ElementPhysics : MonoBehaviour
             return;
         }
 
+        if (element is Gas gas)
+        {
+            gasPhysics.Simulate(x, y, gas);
+
+            return;
+        }
     }
 
 }
