@@ -13,72 +13,220 @@ public class GasPhysics
         this.elementGrid = elementGrid;
     }
 
-    public void Simulate(int x, int y, Gas element)
+    public void Simulate(int x, int y, Gas gas)
     {
-        List<Vector2Int> options = FindAllAvailablePositions(x, y);
+        // get alls available positions and their weights
+        var weightedAvailablePostions = GetWeightedAvailablePositions(x, y, gas);
 
-        if (options.Count == 0) return;
+        // if not positions available return
+        if (weightedAvailablePostions.Count == 0) return;
 
-        Vector2Int randomOption = options[Random.Range(0, options.Count)];
+        // randomly (with weight) choose position to move to
+        var randomPosition = WeightedRandom.GetRandomPosition(weightedAvailablePostions);
 
-        elementGrid.SwapElements(x, y, randomOption.x, randomOption.y);
+        // swap to choosen position
+        elementGrid.SwapElements(x, y, randomPosition.x, randomPosition.y);
     }
 
-    public List<Vector2Int> FindAllAvailablePositions(int x, int y)
+    // gets all available positions for element to move and calulates their weight, depending on type of gas and which positions are free or occupied by other gas
+    private Dictionary<(int x, int y), uint> GetWeightedAvailablePositions(int x, int y, Gas gas)
     {
-        List<Vector2Int> options = new();
+        Dictionary<(int x, int y), uint> weightedOptions = new();
 
-        if (GetElementInfo(x, y + 1).isSwappable)
+
+        // get information about all surrounding elements 
+        var topElementInfo = GetElementInfo(x, y + 1);
+        var bottomElementInfo = GetElementInfo(x, y - 1);
+
+        var topLeftElementInfo = GetElementInfo(x - 1, y + 1);
+        var bottomRightElementInfo = GetElementInfo(x + 1, y - 1);
+
+        var topRightElementInfo = GetElementInfo(x + 1, y + 1);
+        var bottomLeftElementInfo = GetElementInfo(x - 1, y - 1);
+
+        var rightElementInfo = GetElementInfo(x + 1, y);
+        var leftElementInfo = GetElementInfo(x - 1, y);
+
+
+
+        // top 
+        if (topElementInfo.isSwappable)
         {
-            options.Add(new Vector2Int(x, y+1));
+            // depending on how much gas lighter or heavier than air there is more chance for some positions
+            // (lighter --> more chance for going up)
+            if (Gas.airMolarMass / gas.molarMass > 2)
+            {
+                AddWeightToPositionDictionary(weightedOptions, (x, y + 1), 5);
+            }
+            else if (Gas.airMolarMass / gas.molarMass > 1.1f)
+            {
+                AddWeightToPositionDictionary(weightedOptions, (x, y + 1), 2);
+            }
+            else
+            {
+                AddWeightToPositionDictionary(weightedOptions, (x, y + 1), 1);
+            }
+        }
+        else if (topElementInfo.isGas && bottomElementInfo.isSwappable)
+        {
+            // if position has element of type gas,
+            // current gas will have more chance to go on oposite position
+            // (top element is gas --> more chance for current element to go down)
+            AddWeightToPositionDictionary(weightedOptions, (x, y - 1), 5);
         }
 
-        if (GetElementInfo(x - 1, y + 1).isSwappable)
+
+        // top left
+        if (topLeftElementInfo.isSwappable)
         {
-            options.Add(new Vector2Int(x-1, y +1));
+            if (Gas.airMolarMass / gas.molarMass > 2)
+            {
+                AddWeightToPositionDictionary(weightedOptions, (x - 1, y + 1), 5);
+            }
+            else if (Gas.airMolarMass / gas.molarMass > 1.1f)
+            {
+                AddWeightToPositionDictionary(weightedOptions, (x - 1, y + 1), 2);
+            }
+            else
+            {
+                AddWeightToPositionDictionary(weightedOptions, (x - 1, y + 1), 1);
+            }
+        }
+        else if (topLeftElementInfo.isGas && bottomRightElementInfo.isSwappable)
+        {
+            AddWeightToPositionDictionary(weightedOptions, (x + 1, y - 1), 5);
         }
 
-        if (GetElementInfo(x + 1, y + 1).isSwappable)
+
+        // top right
+        if (topRightElementInfo.isSwappable)
         {
-            options.Add(new Vector2Int(x +1 , y +1 ));
+            if (Gas.airMolarMass / gas.molarMass > 2)
+            {
+                AddWeightToPositionDictionary(weightedOptions, (x + 1, y + 1), 5);
+            }
+            else if (Gas.airMolarMass / gas.molarMass > 1.1f)
+            {
+                AddWeightToPositionDictionary(weightedOptions, (x + 1, y + 1), 2);
+            }
+            else
+            {
+                AddWeightToPositionDictionary(weightedOptions, (x + 1, y + 1), 1);
+            }
+        }
+        else if (topRightElementInfo.isGas && bottomLeftElementInfo.isSwappable)
+        {
+            AddWeightToPositionDictionary(weightedOptions, (x - 1, y - 1), 5);
         }
 
 
-
-        if (GetElementInfo(x - 1, y).isSwappable)
+        // right
+        if (rightElementInfo.isSwappable)
         {
-            options.Add(new Vector2Int(x - 1, y));
+            AddWeightToPositionDictionary(weightedOptions, (x + 1, y), 3);
+        }
+        else if (rightElementInfo.isGas && leftElementInfo.isSwappable)
+        {
+            AddWeightToPositionDictionary(weightedOptions, (x - 1, y), 5);
         }
 
-        if (GetElementInfo(x +1, y).isSwappable)
+        // left
+        if (leftElementInfo.isSwappable)
         {
-            options.Add(new Vector2Int(x + 1, y));
+            AddWeightToPositionDictionary(weightedOptions, (x - 1, y), 3);
+        }
+        else if (leftElementInfo.isGas && rightElementInfo.isSwappable)
+        {
+            AddWeightToPositionDictionary(weightedOptions, (x + 1, y), 5);
         }
 
 
-        if (GetElementInfo(x - 1, y - 1).isSwappable)
+        // bottom
+        if (bottomElementInfo.isSwappable)
         {
-            options.Add(new Vector2Int(x - 1, y - 1));
+            if (Gas.airMolarMass / gas.molarMass < 0.5f)
+            {
+                AddWeightToPositionDictionary(weightedOptions, (x, y - 1), 5);
+            }
+            else if (Gas.airMolarMass / gas.molarMass < 0.8f)
+            {
+                AddWeightToPositionDictionary(weightedOptions, (x, y - 1), 2);
+            }
+            else
+            {
+                AddWeightToPositionDictionary(weightedOptions, (x, y - 1), 1);
+            }
+        }
+        else if (bottomElementInfo.isGas && topElementInfo.isSwappable)
+        {
+            AddWeightToPositionDictionary(weightedOptions, (x, y + 1), 5);
         }
 
-        if (GetElementInfo(x + 1, y - 1).isSwappable)
+
+        // bottom right
+        if (bottomRightElementInfo.isSwappable)
         {
-            options.Add(new Vector2Int(x + 1, y - 1));
+            if (Gas.airMolarMass / gas.molarMass < 0.5f)
+            {
+                AddWeightToPositionDictionary(weightedOptions, (x + 1, y - 1), 5);
+            }
+            else if (Gas.airMolarMass / gas.molarMass < 0.8f)
+            {
+                AddWeightToPositionDictionary(weightedOptions, (x + 1, y - 1), 2);
+            }
+            else
+            {
+                AddWeightToPositionDictionary(weightedOptions, (x + 1, y - 1), 1);
+            }
+        }
+        else if (bottomRightElementInfo.isGas && topLeftElementInfo.isSwappable)
+        {
+            AddWeightToPositionDictionary(weightedOptions, (x - 1, y + 1), 5);
         }
 
-        if (GetElementInfo(x, y - 1).isSwappable)
+
+        // bottom left
+        if (bottomLeftElementInfo.isSwappable)
         {
-            options.Add(new Vector2Int(x, y - 1));
+            if (Gas.airMolarMass / gas.molarMass < 0.5f)
+            {
+                AddWeightToPositionDictionary(weightedOptions, (x - 1, y - 1), 5);
+            }
+            else if (Gas.airMolarMass / gas.molarMass < 0.8f)
+            {
+                AddWeightToPositionDictionary(weightedOptions, (x - 1, y - 1), 2);
+            }
+            else
+            {
+                AddWeightToPositionDictionary(weightedOptions, (x - 1, y - 1), 1);
+            }
+        }
+        else if (bottomLeftElementInfo.isGas && topRightElementInfo.isSwappable)
+        {
+            AddWeightToPositionDictionary(weightedOptions, (x + 1, y + 1), 5);
         }
 
-        return options;
+
+        return weightedOptions;
+    }
+
+    private void AddWeightToPositionDictionary(Dictionary<(int x, int y), uint> dictionary, (int x, int y) position, uint weight)
+    {
+        if (dictionary.ContainsKey(position))
+        {
+            dictionary[position] += weight;
+        }
+        else
+        {
+            dictionary[position] = weight;
+        }
     }
 
 
     struct ElementInfo
     {
         public bool isSwappable;
-
+        public bool isGas;
     }
 
     // get ElementInfo for given position
@@ -90,6 +238,7 @@ public class GasPhysics
         if (!elementGrid.IsInBounds(x, y))
         {
             elementInfo.isSwappable = false;
+            elementInfo.isGas = false;
 
             return elementInfo;
         }
@@ -100,11 +249,21 @@ public class GasPhysics
         if (elementToSwapWith == null)
         {
             elementInfo.isSwappable = true;
+            elementInfo.isGas = false;
 
             return elementInfo;
-        } else
+        }
+        else if (elementToSwapWith is Gas)
         {
             elementInfo.isSwappable = false;
+            elementInfo.isGas = true;
+
+            return elementInfo;
+        }
+        else
+        {
+            elementInfo.isSwappable = false;
+            elementInfo.isGas = false;
 
             return elementInfo;
         }

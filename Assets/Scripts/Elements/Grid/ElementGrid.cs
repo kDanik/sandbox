@@ -144,23 +144,23 @@ public class ElementGrid
     public void AddSuroundingPositionsToCheckNextIteration(int x, int y)
     {
         // center
-        checkNextIteration.Add((x, y));
+        if (ElementPresent(x, y)) checkNextIteration.Add((x, y));
         // bottom
-        checkNextIteration.Add((x, y - 1));
+        if (ElementPresent(x, y - 1)) checkNextIteration.Add((x, y - 1));
         // left
-        checkNextIteration.Add((x - 1, y));
+        if (ElementPresent(x - 1, y)) checkNextIteration.Add((x - 1, y));
         // up
-        checkNextIteration.Add((x, y + 1));
+        if (ElementPresent(x, y + 1)) checkNextIteration.Add((x, y + 1));
         // right
-        checkNextIteration.Add((x + 1, y));
+        if (ElementPresent(x + 1, y)) checkNextIteration.Add((x + 1, y));
         // left up
-        checkNextIteration.Add((x - 1, y + 1));
+        if (ElementPresent(x - 1, y + 1)) checkNextIteration.Add((x - 1, y + 1));
         // right down
-        checkNextIteration.Add((x + 1, y - 1));
+        if (ElementPresent(x + 1, y - 1)) checkNextIteration.Add((x + 1, y - 1));
         // left bottom
-        checkNextIteration.Add((x - 1, y - 1));
+        if (ElementPresent(x - 1, y - 1)) checkNextIteration.Add((x - 1, y - 1));
         // top right
-        checkNextIteration.Add((x + 1, y + 1));
+        if (ElementPresent(x + 1, y + 1)) checkNextIteration.Add((x + 1, y + 1));
     }
 
     // Adds one position to positionsChangedThisIteration, so it's physics calculated next iteration

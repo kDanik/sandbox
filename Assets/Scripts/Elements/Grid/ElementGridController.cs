@@ -51,7 +51,7 @@ public class ElementGridController : MonoBehaviour
                 {
 
 
-                    if (!checkThisFrame.Contains((x, y))) continue;
+                   if (!checkThisFrame.Contains((x, y))) continue;
 
                     BaseElement element = elementGrid.GetElement(x, y);
 
@@ -146,6 +146,18 @@ public class ElementGridController : MonoBehaviour
             if (elementChoosenTest == 5)
             {
                 elementSpawner.SpawnElement<Methane>(posInGrid.x, posInGrid.y, new QuadSolidBrush());
+            }
+            if (elementChoosenTest == 6)
+            {
+                elementSpawner.SpawnElement<Propane>(posInGrid.x, posInGrid.y, new QuadSolidBrush());
+            }
+            if (elementChoosenTest == 7)
+            {
+                elementSpawner.SpawnElement<Smoke>(posInGrid.x, posInGrid.y, new QuadSolidBrush());
+            }
+            if (elementChoosenTest == 8)
+            {
+                elementSpawner.SpawnElement<ColoredTestGas>(posInGrid.x, posInGrid.y, new QuadSolidBrush());
             }
         }
     }
