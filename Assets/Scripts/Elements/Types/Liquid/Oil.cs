@@ -8,10 +8,10 @@ public class Oil : Liquid
 
     private static Color CreateRandomOilColor()
     {
-        float red = Random.Range(0.5f, 1f);
-        float green = Random.Range(0.5f, 1f);
-        float blue = Random.Range(0.0f, 0.01f);
-        float alpha = 0.5f;
+        float red = Random.Range(0.8f, 1f);
+        float green = Random.Range(0.8f, 1f);
+        float blue = 0;
+        float alpha = 0.4f;
 
         return new Color(red, green, blue, alpha);
     }

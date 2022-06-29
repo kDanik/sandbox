@@ -3,11 +3,16 @@ using System.Collections.Generic;
 
 public class WeightedRandom
 {
-    public static (int x, int y) GetRandomPosition(Dictionary<(int x, int y), uint> positionWeightPairs) {
+
+    // takes as input dictionary of: key - position (x, y) and unit weight
+    // returns weighted random position
+    public static (int x, int y) GetRandomPosition(Dictionary<(int x, int y), uint> positionWeightPairs)
+    {
 
         uint weightSum = 0;
 
-        foreach (var weight in positionWeightPairs.Values) {
+        foreach (var weight in positionWeightPairs.Values)
+        {
             weightSum += weight;
         }
 

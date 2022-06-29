@@ -2,7 +2,7 @@
 
 public class Smoke : Gas
 {
-    public Smoke() : base(10.1f, RoomTemperature, CreateRandomStoneColor()) // should research more about weight of gasses, maybe molar mass is not best representation
+    public Smoke() : base(10.1f, RoomTemperature, CreateRandomStoneColor())
     {
     }
 
