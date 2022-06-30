@@ -5,6 +5,7 @@ public class ElementGridController : MonoBehaviour
 {
     private SandboxPixelRenderer sandboxPixelRenderer;
     private ElementPhysics elementPhysics;
+    private ElementReactions elementReactions;
 
     [SerializeField]
     private float pixelSizeInUnityUnits;
@@ -30,6 +31,8 @@ public class ElementGridController : MonoBehaviour
         elementPhysics = this.gameObject.GetComponent<ElementPhysics>();
         elementPhysics.InitElementPhysics(elementGrid);
 
+        elementReactions = new ElementReactions(elementGrid);
+
         elementSpawner = new ElementSpawner(elementGrid);
 
         sandboxPixelRenderer.ApplyCurrentChangesToTexture();
@@ -50,12 +53,13 @@ public class ElementGridController : MonoBehaviour
                 for (int x = 0; x < width; x++)
                 {
 
-
-                   if (!checkThisFrame.Contains((x, y))) continue;
+                    if (!checkThisFrame.Contains((x, y))) continue;
 
                     BaseElement element = elementGrid.GetElement(x, y);
 
                     if (element == null) continue;
+
+                    elementReactions.CheckReactions(x, y, element);
 
                     elementPhysics.SimulateElementPhysics(x, y, element);
                 }
@@ -67,13 +71,13 @@ public class ElementGridController : MonoBehaviour
             {
                 for (int x = width; x >= 0; x--)
                 {
-
-
                     if (!checkThisFrame.Contains((x, y))) continue;
 
                     BaseElement element = elementGrid.GetElement(x, y);
 
                     if (element == null) continue;
+
+                    elementReactions.CheckReactions(x, y, element);
 
                     elementPhysics.SimulateElementPhysics(x, y, element);
                 }

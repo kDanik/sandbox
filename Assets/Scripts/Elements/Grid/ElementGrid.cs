@@ -80,6 +80,7 @@ public class ElementGrid
         }
     }
 
+
     // returns element for given position if in bounds, otherwise returns null
     public BaseElement GetElement(int x, int y)
     {

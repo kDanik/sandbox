@@ -10,7 +10,7 @@ public class Oil : Liquid
     {
         float red = Random.Range(0.8f, 1f);
         float green = Random.Range(0.8f, 1f);
-        float blue = 0;
+        float blue = 0f;
         float alpha = 0.4f;
 
         return new Color(red, green, blue, alpha);
