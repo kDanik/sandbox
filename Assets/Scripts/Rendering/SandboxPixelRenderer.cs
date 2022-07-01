@@ -54,8 +54,6 @@ public class SandboxPixelRenderer : MonoBehaviour
     {
         if (!IsPositionInBounds(x, y)) return;
 
-        if (GetPixel(x, y).Equals(color)) return;
-
         texture.SetPixel(x, y, color);
 
         hasChangesSinceLastApply = true;

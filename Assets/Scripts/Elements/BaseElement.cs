@@ -11,7 +11,7 @@ public class BaseElement
     // Kelvin
     public uint temperature;
 
-    public Color color;
+    public Color32 color;
 
     public const uint RoomTemperature = 293;
 

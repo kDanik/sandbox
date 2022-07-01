@@ -112,16 +112,16 @@ public class GranularPhysics
     private bool TrySwapWithBottomLeftElement(ref int x, ref int y)
     {
         ElementInfo bottomLeftElementInfo = GetElementInfo(x - 1, y - 1);
-        bool leftElementIsSwappable = GetElementInfo(x - 1, y).isSwappable;
+        ElementInfo leftElementInfo = GetElementInfo(x - 1, y);
 
-        if (!bottomLeftElementInfo.isSwappable || !leftElementIsSwappable) return false;
+        if (!bottomLeftElementInfo.isSwappable || !leftElementInfo.isSwappable) return false;
 
         // tries to move liquid or gas to the side instead of swapping with it
         // makes granular materials that fall on liquids or gas act a little more natural
         if (bottomLeftElementInfo.isLiquidOrGas)
         {
 
-            if (elementGrid.IsInBoundsAndEmpty(x - 1, y))
+            if (leftElementInfo.isSwappable && !leftElementInfo.isLiquidOrGas)
             {
                 // swaps liquid element (bottom left) with empty space (left, top)
                 elementGrid.SwapElements(x - 1, y - 1, x - 1, y);
@@ -149,9 +149,9 @@ public class GranularPhysics
     private bool TrySwapWithBottomRightElement(ref int x, ref int y)
     {
         ElementInfo bottomRightElementInfo = GetElementInfo(x + 1, y - 1);
-        bool rightElementIsSwappable = GetElementInfo(x + 1, y).isSwappable;
+        ElementInfo rightElementInfo = GetElementInfo(x + 1, y);
 
-        if (!bottomRightElementInfo.isSwappable || !rightElementIsSwappable) return false;
+        if (!bottomRightElementInfo.isSwappable || !rightElementInfo.isSwappable) return false;
 
 
         // tries to move liquid or gas to the side instead of swapping with it
@@ -159,7 +159,7 @@ public class GranularPhysics
         if (bottomRightElementInfo.isLiquidOrGas)
         {
           
-            if (elementGrid.IsInBoundsAndEmpty(x + 1, y))
+            if (rightElementInfo.isSwappable && !rightElementInfo.isLiquidOrGas)
             {
                 // swaps liquid element (bottom right) with empty space (right, top)
                 elementGrid.SwapElements(x + 1, y - 1, x + 1, y);
