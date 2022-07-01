@@ -161,19 +161,19 @@ public class ElementGrid
             checkNextIteration[x, y - 1] = true;
 
             // right down
-            if (x + 1 < height) checkNextIteration[x + 1, y - 1] = true;
+            if (x + 1 < width) checkNextIteration[x + 1, y - 1] = true;
 
             // left bottom
             if (x > 0) checkNextIteration[x - 1, y - 1] = true;
         }
 
-        if (y < height - 1)
+        if (y + 1 < height)
         {
             // top
             checkNextIteration[x, y + 1] = true;
 
             // right top
-            if (x + 1 < height) checkNextIteration[x + 1, y + 1] = true;
+            if (x + 1 < width) checkNextIteration[x + 1, y + 1] = true;
 
             // left top
             if (x > 0) checkNextIteration[x - 1, y + 1] = true;
@@ -183,7 +183,7 @@ public class ElementGrid
         // left
         if (x > 0) checkNextIteration[x - 1, y] = true;
         // right
-        if (x + 1 < height) checkNextIteration[x + 1, y] = true;
+        if (x + 1 < width) checkNextIteration[x + 1, y] = true;
     }
 
     // Adds one position to positionsChangedThisIteration, so it's physics calculated next iteration
