@@ -3,7 +3,7 @@ using UnityEngine;
 
 
 // IMPORTANT!
-// this class contains information about elementGrid and simplest methods to work with its elementsw
+// this class contains information about elementGrid and simplest methods to work with its elements
 // 
 //
 // some methods in this class look like they could be simplified by using each other,
@@ -23,7 +23,7 @@ public class ElementGrid
     // list with positions that changed is some form this iteration(or their neighbors), and should be checked next iteration
     // and should be checked by physics class or some other class next iteration
 
-    private HashSet<(int x, int y)> checkNextIteration = new HashSet<(int x, int y)>();
+    private HashSet<(int x, int y)> checkNextIteration = new HashSet<(int x, int y)>(); // TODO replace this with 2 dim array (x, y) for better performance
 
 
     // list with positions that were already checked by physics calculations
@@ -44,7 +44,7 @@ public class ElementGrid
     {
         var buffer = new HashSet<(int x, int y)>(checkNextIteration);
 
-        checkNextIteration.Clear();
+        checkNextIteration = new();
 
         return buffer;
     }
@@ -58,7 +58,7 @@ public class ElementGrid
     // fully clears list of ignore positions for this iteration
     public void ClearIgnoreThisIterationPositionsList()
     {
-        ignoreThisIteration.Clear();
+        ignoreThisIteration = new();
     }
 
     // swaps 2 elements if both are in bound. Also works if one of elements is null
@@ -75,8 +75,8 @@ public class ElementGrid
             AddSuroundingPositionsToCheckNextIteration(x1, y1);
             AddSuroundingPositionsToCheckNextIteration(x2, y2);
 
-            UpdateColorValues(x2, y2);
-            UpdateColorValues(x1, y1);
+            UpdateColorValues(x2, y2, elementGrid[x2, y2]);
+            UpdateColorValues(x1, y1, elementGrid[x1, y1]);
         }
     }
 
@@ -104,7 +104,7 @@ public class ElementGrid
             ignoreThisIteration.Add((x, y));
             AddSuroundingPositionsToCheckNextIteration(x, y);
 
-            UpdateColorValues(x, y);
+            UpdateColorValues(x, y, element);
         }
     }
 
@@ -118,15 +118,13 @@ public class ElementGrid
             ignoreThisIteration.Add((x, y));
             AddSuroundingPositionsToCheckNextIteration(x, y);
 
-            UpdateColorValues(x, y);
+            UpdateColorValues(x, y, element);
         }
     }
 
     // Updates sandboxPixelRenderer pixel for given position
-    public void UpdateColorValues(int x, int y)
+    public void UpdateColorValues(int x, int y, BaseElement element)
     {
-
-        BaseElement element = GetElement(x, y);
         Color color = Color.clear;
 
         if (element != null) color = element.color;
