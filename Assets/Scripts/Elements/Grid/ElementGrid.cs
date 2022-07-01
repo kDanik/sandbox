@@ -153,23 +153,37 @@ public class ElementGrid
     public void AddSuroundingPositionsToCheckNextIteration(int x, int y)
     {
         // center
-        if (ElementPresent(x, y)) checkNextIteration[x, y] = true;
+        checkNextIteration[x, y] = true;
 
-        if (ElementPresent(x, y - 1)) checkNextIteration[x, y - 1] = true;
+        if (y > 0)
+        {
+            // down
+            checkNextIteration[x, y - 1] = true;
+
+            // right down
+            if (x + 1 < height) checkNextIteration[x + 1, y - 1] = true;
+
+            // left bottom
+            if (x > 0) checkNextIteration[x - 1, y - 1] = true;
+        }
+
+        if (y < height - 1)
+        {
+            // top
+            checkNextIteration[x, y + 1] = true;
+
+            // right top
+            if (x + 1 < height) checkNextIteration[x + 1, y + 1] = true;
+
+            // left top
+            if (x > 0) checkNextIteration[x - 1, y + 1] = true;
+        }
+
+
         // left
-        if (ElementPresent(x - 1, y)) checkNextIteration[x - 1, y] = true;
-        // up
-        if (ElementPresent(x, y + 1)) checkNextIteration[x, y + 1] = true;
+        if (x > 0) checkNextIteration[x - 1, y] = true;
         // right
-        if (ElementPresent(x + 1, y)) checkNextIteration[x + 1, y] = true;
-        // left up
-        if (ElementPresent(x - 1, y + 1)) checkNextIteration[x - 1, y + 1] = true;
-        // right down
-        if (ElementPresent(x + 1, y - 1)) checkNextIteration[x + 1, y - 1] = true;
-        // left bottom
-        if (ElementPresent(x - 1, y - 1)) checkNextIteration[x - 1, y - 1] = true;
-        // top right
-        if (ElementPresent(x + 1, y + 1)) checkNextIteration[x + 1, y + 1] = true;
+        if (x + 1 < height) checkNextIteration[x + 1, y] = true;
     }
 
     // Adds one position to positionsChangedThisIteration, so it's physics calculated next iteration
