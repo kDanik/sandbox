@@ -41,7 +41,7 @@ public class ElementGridController : MonoBehaviour
     // this part should refactored and put in another class
     void FixedUpdate()
     {
-        var checkThisFrame = elementGrid.CollectCheckNextIterationPosition();
+        elementGrid.PrepareCheckThisIteration();
         // ONLY TEST METHOD
 
         int randomRange = Random.Range(0, 2);
@@ -53,7 +53,7 @@ public class ElementGridController : MonoBehaviour
                 for (int x = 0; x < width; x++)
                 {
 
-                    if (!checkThisFrame.Contains((x, y))) continue;
+                    if (!elementGrid.IsPositionToCheckInCurrentIteration(x, y)) continue;
 
                     BaseElement element = elementGrid.GetElement(x, y);
 
@@ -69,9 +69,9 @@ public class ElementGridController : MonoBehaviour
         {
             for (int y = 0; y < height; y++)
             {
-                for (int x = width; x >= 0; x--)
+                for (int x = width - 1; x >= 0; x--)
                 {
-                    if (!checkThisFrame.Contains((x, y))) continue;
+                    if (!elementGrid.IsPositionToCheckInCurrentIteration(x, y)) continue;
 
                     BaseElement element = elementGrid.GetElement(x, y);
 

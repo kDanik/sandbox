@@ -11,24 +11,28 @@ using UnityEngine;
 // IMPORTANT!
 public class ElementGrid
 {
-    private BaseElement[,] elementGrid;
+    private readonly BaseElement[,] elementGrid;
 
-    private SandboxPixelRenderer sandboxPixelRenderer;
-
-    private int height;
-
-    private int width;
-
-
-    // list with positions that changed is some form this iteration(or their neighbors), and should be checked next iteration
+    // positions that changed is some form this iteration(or their neighbors), and should be checked next iteration
     // and should be checked by physics class or some other class next iteration
+    private bool[,] checkNextIteration;
 
-    private HashSet<(int x, int y)> checkNextIteration = new HashSet<(int x, int y)>(); // TODO replace this with 2 dim array (x, y) for better performance
+
+    // copy of checkNextIteration from previous iteration used for this iteration
+    private bool[,] checkThisIteration;
 
 
-    // list with positions that were already checked by physics calculations
+    // positions that were already checked by physics calculations
     // and should be ignored this iteration
-    private HashSet<(int x, int y)> ignoreThisIteration = new HashSet<(int x, int y)>();
+    private bool[,] ignoreThisIteration;
+
+
+    // pixel renderer used to updated colors of elements when they are created, deleted, moved
+    private readonly SandboxPixelRenderer sandboxPixelRenderer;
+
+    // initial height and width of grid
+    private readonly int height;
+    private readonly int width;
 
     public ElementGrid(int width, int height, SandboxPixelRenderer sandboxPixelRenderer)
     {
@@ -37,28 +41,34 @@ public class ElementGrid
         this.sandboxPixelRenderer = sandboxPixelRenderer;
 
         elementGrid = new BaseElement[width, height];
+        ignoreThisIteration = new bool[width, height];
+        checkNextIteration = new bool[width, height];
     }
 
     // returns positionsChangedThisIteration as array and clears it
-    public HashSet<(int x, int y)> CollectCheckNextIterationPosition()
+    public void PrepareCheckThisIteration()
     {
-        var buffer = new HashSet<(int x, int y)>(checkNextIteration);
+        checkThisIteration = (bool[,])checkNextIteration.Clone();
 
-        checkNextIteration = new();
-
-        return buffer;
+        checkNextIteration = new bool[width, height];
     }
 
-    // returns true if position is in ignore list for this iteration
+    // returns true if position is in ignore array for this iteration
     public bool IsIgnorePosition(int x, int y)
     {
-        return ignoreThisIteration.Contains((x, y));
+        return ignoreThisIteration[x, y] == true;
     }
 
-    // fully clears list of ignore positions for this iteration
+    // returns true if position is in check this iteration array
+    public bool IsPositionToCheckInCurrentIteration(int x, int y)
+    {
+        return checkThisIteration[x, y] == true;
+    }
+
+    // creates new array for ignoreThisIteration instead existing one
     public void ClearIgnoreThisIterationPositionsList()
     {
-        ignoreThisIteration = new();
+        ignoreThisIteration = new bool[width, height];
     }
 
     // swaps 2 elements if both are in bound. Also works if one of elements is null
@@ -70,8 +80,8 @@ public class ElementGrid
             elementGrid[x2, y2] = elementGrid[x1, y1];
             elementGrid[x1, y1] = buff;
 
-            ignoreThisIteration.Add((x1, y1));
-            ignoreThisIteration.Add((x2, y2));
+            ignoreThisIteration[x1, y1] = true;
+            ignoreThisIteration[x2, y2] = true;
             AddSuroundingPositionsToCheckNextIteration(x1, y1);
             AddSuroundingPositionsToCheckNextIteration(x2, y2);
 
@@ -101,7 +111,7 @@ public class ElementGrid
         {
             elementGrid[x, y] = element;
 
-            ignoreThisIteration.Add((x, y));
+            ignoreThisIteration[x, y] = true;
             AddSuroundingPositionsToCheckNextIteration(x, y);
 
             UpdateColorValues(x, y, element);
@@ -115,7 +125,7 @@ public class ElementGrid
         {
             elementGrid[x, y] = element;
 
-            ignoreThisIteration.Add((x, y));
+            ignoreThisIteration[x, y] = true;
             AddSuroundingPositionsToCheckNextIteration(x, y);
 
             UpdateColorValues(x, y, element);
@@ -143,29 +153,29 @@ public class ElementGrid
     public void AddSuroundingPositionsToCheckNextIteration(int x, int y)
     {
         // center
-        if (ElementPresent(x, y)) checkNextIteration.Add((x, y));
-        // bottom
-        if (ElementPresent(x, y - 1)) checkNextIteration.Add((x, y - 1));
+        if (ElementPresent(x, y)) checkNextIteration[x, y] = true;
+
+        if (ElementPresent(x, y - 1)) checkNextIteration[x, y - 1] = true;
         // left
-        if (ElementPresent(x - 1, y)) checkNextIteration.Add((x - 1, y));
+        if (ElementPresent(x - 1, y)) checkNextIteration[x - 1, y] = true;
         // up
-        if (ElementPresent(x, y + 1)) checkNextIteration.Add((x, y + 1));
+        if (ElementPresent(x, y + 1)) checkNextIteration[x, y + 1] = true;
         // right
-        if (ElementPresent(x + 1, y)) checkNextIteration.Add((x + 1, y));
+        if (ElementPresent(x + 1, y)) checkNextIteration[x + 1, y] = true;
         // left up
-        if (ElementPresent(x - 1, y + 1)) checkNextIteration.Add((x - 1, y + 1));
+        if (ElementPresent(x - 1, y + 1)) checkNextIteration[x - 1, y + 1] = true;
         // right down
-        if (ElementPresent(x + 1, y - 1)) checkNextIteration.Add((x + 1, y - 1));
+        if (ElementPresent(x + 1, y - 1)) checkNextIteration[x + 1, y - 1] = true;
         // left bottom
-        if (ElementPresent(x - 1, y - 1)) checkNextIteration.Add((x - 1, y - 1));
+        if (ElementPresent(x - 1, y - 1)) checkNextIteration[x - 1, y - 1] = true;
         // top right
-        if (ElementPresent(x + 1, y + 1)) checkNextIteration.Add((x + 1, y + 1));
+        if (ElementPresent(x + 1, y + 1)) checkNextIteration[x + 1, y + 1] = true;
     }
 
     // Adds one position to positionsChangedThisIteration, so it's physics calculated next iteration
     public void AddPositionToCheckNextIteration(int x, int y)
     {
-        checkNextIteration.Add((x, y));
+        checkNextIteration[x, y] = true;
     }
 
     // Returns true if position is in bounds of the grid
