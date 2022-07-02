@@ -7,6 +7,7 @@ public class SandboxPixelRenderer : MonoBehaviour
     private GameObject renderObject;
 
     private Texture2D texture;
+    private Color32[] texturePixelArray;
 
     // texture size in pixels
     // (texture.height and texture.width is MUCH slower)
@@ -22,6 +23,7 @@ public class SandboxPixelRenderer : MonoBehaviour
         this.height = height;
         this.width = width;
 
+        texturePixelArray = new Color32[height * width];
         texture = new Texture2D(width, height)
         {
             filterMode = FilterMode.Point // filter mode for pixeled textures
@@ -68,7 +70,8 @@ public class SandboxPixelRenderer : MonoBehaviour
     {
         if (!IsPositionInBounds(x, y)) return;
 
-        texture.SetPixel(x, y, color);
+        texturePixelArray[y * width + x] = color;
+        //texture.SetPixel(x, y, color);
     }
 
     /// <summary>
@@ -76,6 +79,7 @@ public class SandboxPixelRenderer : MonoBehaviour
     /// </summary>
     public void ApplyCurrentChangesToTexture()
     {
+        texture.SetPixels32(texturePixelArray);
         texture.Apply();
     }
 
