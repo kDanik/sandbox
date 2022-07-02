@@ -4,7 +4,7 @@ public class Liquid : BaseElement
 {
     private int flowDirection = Random.Range(0, 1);
 
-    public Liquid(uint weight, uint temperature, Color color) : base(weight, temperature, color)
+    public Liquid(uint weight, uint temperature, Color32 color) : base(weight, temperature, color)
     {
     }
 

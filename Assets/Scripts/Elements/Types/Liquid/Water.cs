@@ -2,17 +2,16 @@
 
 public class Water : Liquid
 {
-    public Water() : base(1000, RoomTemperature, CreateRandomSandColor())
+    public Water() : base(1000, RoomTemperature, CreateRandomWaterColor())
     {
     }
 
-    private static Color CreateRandomSandColor()
+    private static Color32 CreateRandomWaterColor()
     {
-        float red = Random.Range(0.0f, 0.05f);
-        float green = Random.Range(0.0f, 0.1f);
-        float blue = Random.Range(0.8f, 1f);
-        float alpha = 0.5f;
+        byte red = (byte)Random.Range(0, 15);
+        byte green = (byte)Random.Range(0, 25);
+        byte blue = (byte)Random.Range(210, 255);
 
-        return new Color(red, green, blue, alpha);
+        return new Color32(red, green, blue, 125);
     }
 }

@@ -6,13 +6,12 @@ public class Sand : GranularMaterial
     {
     }
 
-    private static Color CreateRandomSandColor()
+    private static Color32 CreateRandomSandColor()
     {
-        float red = Random.Range(0.78f, 0.94f);
-        float green = Random.Range(0.78f, 0.94f);
-        float blue = Random.Range(0.45f, 0.60f);
-        float alpha = 1;
+        byte red = (byte)Random.Range(190, 255);
+        byte green = (byte)Random.Range(190, 255);
+        byte blue = (byte)Random.Range(110, 160);
 
-        return new Color(red, green, blue, alpha);
+        return new Color32(red, green, blue, 255);
     }
 }

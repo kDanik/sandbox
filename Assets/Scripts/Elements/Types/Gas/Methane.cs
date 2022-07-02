@@ -2,17 +2,16 @@
 
 public class Methane : Gas
 {
-    public Methane() : base(16.04f, RoomTemperature, CreateRandomStoneColor())
+    public Methane() : base(16.04f, RoomTemperature, CreateRandomMethaneColor())
     {
     }
 
-    private static Color CreateRandomStoneColor()
+    private static Color32 CreateRandomMethaneColor()
     {
-        float red = Random.Range(0.78f, 0.94f);
-        float green = Random.Range(0.1f, 0.14f);
-        float blue = Random.Range(0.1f, 0.14f);
-        float alpha = 0.3f;
+        byte red = (byte)Random.Range(190, 255);
+        byte green = (byte)Random.Range(25, 45);
+        byte blue = (byte)Random.Range(25, 45);
 
-        return new Color(red, green, blue, alpha);
+        return new Color32(red, green, blue, 90);
     }
 }

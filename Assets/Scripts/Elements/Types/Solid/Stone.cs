@@ -6,11 +6,10 @@ public class Stone : Solid
     {
     }
 
-    private static Color CreateRandomStoneColor()
+    private static Color32 CreateRandomStoneColor()
     {
-        float allColorValues = Random.Range(0.4f, 0.70f);
-        float alpha = 1;
+        byte allColorValues = (byte)Random.Range(100, 200);
 
-        return new Color(allColorValues, allColorValues, allColorValues, alpha);
+        return new Color32(allColorValues, allColorValues, allColorValues, 255);
     }
 }

@@ -135,11 +135,14 @@ public class ElementGrid
     // Updates sandboxPixelRenderer pixel for given position
     public void UpdateColorValues(int x, int y, BaseElement element)
     {
-        Color color = Color.clear;
-
-        if (element != null) color = element.color;
-
-        sandboxPixelRenderer.SetPixel(x, y, color);
+        if (element != null)
+        {
+            sandboxPixelRenderer.SetPixel(x, y, element.color);
+        }
+        else
+        {
+            sandboxPixelRenderer.SetPixel(x, y, new Color32(0,0,0,0));
+        }
     }
 
     // Returns true if position is in bounds of the grid and there is no element present

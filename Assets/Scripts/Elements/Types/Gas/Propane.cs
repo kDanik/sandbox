@@ -2,17 +2,15 @@
 
 public class Propane : Gas
 {
-    public Propane() : base(44.1f, RoomTemperature, CreateRandomStoneColor())
+    public Propane() : base(44.1f, RoomTemperature, CreateRandomPropaneColor())
     {
     }
 
-    private static Color CreateRandomStoneColor()
+    private static Color32 CreateRandomPropaneColor()
     {
-        float red = Random.Range(0.1f, 0.14f);
-        float green = Random.Range(0.1f, 0.14f);
-        float blue = Random.Range(0.78f, 0.14f);
-        float alpha = 0.3f;
+        byte red = (byte)Random.Range(25, 45);
+        byte green = (byte)Random.Range(25, 45);
 
-        return new Color(red, green, blue, alpha);
+        return new Color32(red, green, 0, 90);
     }
 }

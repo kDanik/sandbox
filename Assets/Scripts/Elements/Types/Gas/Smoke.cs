@@ -2,15 +2,14 @@
 
 public class Smoke : Gas
 {
-    public Smoke() : base(10.1f, RoomTemperature, CreateRandomStoneColor())
+    public Smoke() : base(10.1f, RoomTemperature, CreateRandomSmokeColor())
     {
     }
 
-    private static Color CreateRandomStoneColor()
+    private static Color32 CreateRandomSmokeColor()
     {
-        float allColorValues = Random.Range(0.0f, 0.4f);
-        float alpha = 0.7f;
+        byte allColorValues = (byte)Random.Range(0, 105);
 
-        return new Color(allColorValues, allColorValues, allColorValues, alpha);
+        return new Color32(allColorValues, allColorValues, allColorValues, 190);
     }
 }

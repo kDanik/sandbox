@@ -6,7 +6,7 @@ public class Gas : BaseElement
 
     public float molarMass; // should research more about weight of gasses, maybe molar mass is not best representation
 
-    public Gas(float molarMass, uint temperature, Color color) : base(0, temperature, color)
+    public Gas(float molarMass, uint temperature, Color32 color) : base(0, temperature, color)
     {
         this.molarMass = molarMass;
     }

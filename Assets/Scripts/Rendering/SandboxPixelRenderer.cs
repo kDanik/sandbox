@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class SandboxPixelRenderer : MonoBehaviour
 {
@@ -7,73 +8,82 @@ public class SandboxPixelRenderer : MonoBehaviour
 
     private Texture2D texture;
 
+    // texture size in pixels
+    // (texture.height and texture.width is MUCH slower)
     private int width;
     private int height;
 
-    // stores information if any new pixel colors where changed since last texture apply
-    private bool hasChangesSinceLastApply = false;
-
+    /// <summary>
+    /// Creates texture with given width and height and create renderObject that this texture is attached to.
+    /// Scales renderObject depending on given width, height and pixel size
+    /// </summary>
     public void InitRenderObject(int width, int height, float pixelSizeInUnityUnits)
     {
-        // TODO Setup   
-
         this.height = height;
         this.width = width;
 
         texture = new Texture2D(width, height)
         {
-            filterMode = FilterMode.Point
+            filterMode = FilterMode.Point // filter mode for pixeled textures
         };
 
+
+        // create renderObject, scale it depending on pixel size and width, height and set it's texture
         renderObject.transform.localScale = new Vector3(width * pixelSizeInUnityUnits, height * pixelSizeInUnityUnits, 1);
         renderObject.transform.position = new Vector3(width * pixelSizeInUnityUnits / 2 - pixelSizeInUnityUnits / 2, height * pixelSizeInUnityUnits / 2 - pixelSizeInUnityUnits / 2, 1);
         renderObject.GetComponent<Renderer>().material.mainTexture = texture;
 
-        for (int y = 0; y < height; y++)
-        {
-            for (int x = 0; x < width; x++)
-            {
-                texture.SetPixel(x, y, Color.clear);
-            }
-        }
+        ClearAllPixels();
+    }
+
+
+    /// <summary>
+    /// Sets all pixels in the texture to transparent Color32(0,0,0,0)
+    /// </summary>
+    public void ClearAllPixels()
+    {
+        var textureRawData = texture.GetRawTextureData<Color32>();
+
+        for (int i = 0; i < textureRawData.Length; i++) textureRawData[i] = new Color32(0, 0, 0, 0);
 
         texture.Apply();
     }
 
-    // Gets the color of the pixel of rendered texture from coordinates.
-    // if out of bounds, return Color.clear (0,0,0,0)
-    public Color GetPixel(int x, int y)
+
+    /// <returns>
+    /// returns color of the pixel with given position
+    /// if out of bounds, return Color32(0,0,0,0)
+    /// </returns>
+    public Color32 GetPixel(int x, int y)
     {
-        if (!IsPositionInBounds(x, y)) return Color.clear;
+        if (!IsPositionInBounds(x, y)) return new Color32(0, 0, 0, 0);
 
         return texture.GetPixel(x, y);
     }
 
-    // Sets color of pixel, if coordinates are not out of bound and color is different from current pixel color
-    public void SetPixel(int x, int y, Color color)
+    /// <summary>
+    /// Sets color of pixel with given position, if position is in bounds of texture
+    /// </summary>
+    public void SetPixel(int x, int y, Color32 color)
     {
         if (!IsPositionInBounds(x, y)) return;
 
         texture.SetPixel(x, y, color);
-
-        hasChangesSinceLastApply = true;
     }
 
-    // Appplies changes to pixels (texture.SetPixel) if hasChangesSinceLastApply is true
+    /// <summary>
+    /// Applies changes of pixels (texture.SetPixel) to texture, if hasChangesSinceLastApply is true
+    /// </summary>
     public void ApplyCurrentChangesToTexture()
     {
-        // if no changes were made, textures doesnt need to be updated
-        if (!hasChangesSinceLastApply) return;
-
         texture.Apply();
-
-        hasChangesSinceLastApply = false;
     }
 
-
+    /// <returns>
+    /// true if position is in bounds of texture, otherwise false
+    /// </returns>
     private bool IsPositionInBounds(int x, int y)
     {
         return x >= 0 && y >= 0 && x < width && y < height;
-    }
-
+    }   
 }
