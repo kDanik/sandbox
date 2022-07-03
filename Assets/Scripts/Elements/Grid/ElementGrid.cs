@@ -50,7 +50,7 @@ public class ElementGrid
     /// </summary>
     public void PrepareCheckThisIteration()
     {
-        checkThisIteration = (bool[,])checkNextIteration.Clone();
+        checkThisIteration = checkNextIteration;
 
         checkNextIteration = new bool[width, height];
     }
