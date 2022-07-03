@@ -53,7 +53,7 @@ public class ElementGridController : MonoBehaviour
                 for (int x = 0; x < width; x++)
                 {
 
-                    if (!elementGrid.IsPositionToCheckInCurrentIteration(x, y)) continue;
+                    if (!elementGrid.checkThisIteration[x, y]) continue;
 
                     BaseElement element = elementGrid.GetElement(x, y);
 
@@ -71,7 +71,7 @@ public class ElementGridController : MonoBehaviour
             {
                 for (int x = width - 1; x >= 0; x--)
                 {
-                    if (!elementGrid.IsPositionToCheckInCurrentIteration(x, y)) continue;
+                    if (!elementGrid.checkThisIteration[x, y]) continue;
 
                     BaseElement element = elementGrid.GetElement(x, y);
 

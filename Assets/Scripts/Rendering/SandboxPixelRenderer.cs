@@ -7,6 +7,8 @@ public class SandboxPixelRenderer : MonoBehaviour
     private GameObject renderObject;
 
     private Texture2D texture;
+    
+    // copy of Texture2D used to apply changes to pixels once every iteration instead of using SetPixel for each change
     private Color32[] texturePixelArray;
 
     // texture size in pixels
@@ -71,7 +73,6 @@ public class SandboxPixelRenderer : MonoBehaviour
         if (!IsPositionInBounds(x, y)) return;
 
         texturePixelArray[y * width + x] = color;
-        //texture.SetPixel(x, y, color);
     }
 
     /// <summary>
@@ -80,6 +81,7 @@ public class SandboxPixelRenderer : MonoBehaviour
     public void ApplyCurrentChangesToTexture()
     {
         texture.SetPixels32(texturePixelArray);
+
         texture.Apply();
     }
 

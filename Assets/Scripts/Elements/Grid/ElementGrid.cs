@@ -19,7 +19,7 @@ public class ElementGrid
 
 
     // copy of checkNextIteration from previous iteration used for this iteration
-    private bool[,] checkThisIteration;
+    public bool[,] checkThisIteration;
 
 
     // positions that were already checked by physics calculations
