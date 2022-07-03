@@ -18,20 +18,22 @@ public class GasPhysics
         // get alls available positions and their weights
         var weightedAvailablePostions = GetWeightedAvailablePositions(x, y, gas);
 
-        // if not positions available return
-        if (weightedAvailablePostions.Count == 0) return;
-
         // randomly (with weight) choose position to move to
-        var randomPosition = WeightedRandom.GetRandomPosition(weightedAvailablePostions);
+        var randomPosition = WeightedRandom.GetRandomPosition(weightedAvailablePostions, x, y);
 
         // swap to choosen position
-        elementGrid.SwapElements(x, y, randomPosition.x, randomPosition.y);
+        if (x != randomPosition.x || y != randomPosition.y) elementGrid.SwapElements(x, y, randomPosition.x, randomPosition.y);
     }
 
     // gets all available positions for element to move and calulates their weight, depending on type of gas and which positions are free or occupied by other gas
-    private Dictionary<(int x, int y), uint> GetWeightedAvailablePositions(int x, int y, Gas gas)
+    private uint[,] GetWeightedAvailablePositions(int x, int y, Gas gas)
     {
-        Dictionary<(int x, int y), uint> weightedOptions = new();
+        // this array represents position around x, y and their weights
+        //
+        // [x - 1, y + 1] [x, y + 1] [x + 1, y + 1]
+        // [x - 1, y] [x, y (current element)] [x + 1, y]
+        // [x - 1, y - 1] [x, y - 1] [x + 1, y - 1]
+        uint[,] weightedOptions = new uint[3,3];
 
 
         // get information about all surrounding elements 
@@ -56,15 +58,15 @@ public class GasPhysics
             // (lighter --> more chance for going up)
             if (Gas.airMolarMass / gas.molarMass > 2)
             {
-                AddWeightToPositionDictionary(weightedOptions, (x, y + 1), 5);
+                weightedOptions[1, 0] += 5;
             }
             else if (Gas.airMolarMass / gas.molarMass > 1.1f)
             {
-                AddWeightToPositionDictionary(weightedOptions, (x, y + 1), 2);
+                weightedOptions[1, 0] += 2;
             }
             else
             {
-                AddWeightToPositionDictionary(weightedOptions, (x, y + 1), 1);
+                weightedOptions[1, 0] += 1;
             }
         }
         else if (topElementInfo.isGas && bottomElementInfo.isSwappable)
@@ -72,7 +74,7 @@ public class GasPhysics
             // if position has element of type gas,
             // current gas will have more chance to go on oposite position
             // (top element is gas --> more chance for current element to go down)
-            AddWeightToPositionDictionary(weightedOptions, (x, y - 1), 5);
+            weightedOptions[1, 2] += 5;
         }
 
 
@@ -81,20 +83,20 @@ public class GasPhysics
         {
             if (Gas.airMolarMass / gas.molarMass > 2)
             {
-                AddWeightToPositionDictionary(weightedOptions, (x - 1, y + 1), 5);
+                weightedOptions[0, 0] += 5;
             }
             else if (Gas.airMolarMass / gas.molarMass > 1.1f)
             {
-                AddWeightToPositionDictionary(weightedOptions, (x - 1, y + 1), 2);
+                weightedOptions[0, 0] += 2;
             }
             else
             {
-                AddWeightToPositionDictionary(weightedOptions, (x - 1, y + 1), 1);
+                weightedOptions[0, 0] += 1;
             }
         }
         else if (topLeftElementInfo.isGas && bottomRightElementInfo.isSwappable)
         {
-            AddWeightToPositionDictionary(weightedOptions, (x + 1, y - 1), 5);
+            weightedOptions[2, 2] += 5;
         }
 
 
@@ -103,41 +105,41 @@ public class GasPhysics
         {
             if (Gas.airMolarMass / gas.molarMass > 2)
             {
-                AddWeightToPositionDictionary(weightedOptions, (x + 1, y + 1), 5);
+                weightedOptions[2, 0] += 5;
             }
             else if (Gas.airMolarMass / gas.molarMass > 1.1f)
             {
-                AddWeightToPositionDictionary(weightedOptions, (x + 1, y + 1), 2);
+                weightedOptions[2, 0] += 2;
             }
             else
             {
-                AddWeightToPositionDictionary(weightedOptions, (x + 1, y + 1), 1);
+                weightedOptions[2, 0] += 1;
             }
         }
         else if (topRightElementInfo.isGas && bottomLeftElementInfo.isSwappable)
         {
-            AddWeightToPositionDictionary(weightedOptions, (x - 1, y - 1), 5);
+            weightedOptions[0, 2] += 5;
         }
 
 
         // right
         if (rightElementInfo.isSwappable)
         {
-            AddWeightToPositionDictionary(weightedOptions, (x + 1, y), 3);
+            weightedOptions[2, 1] += 3;
         }
         else if (rightElementInfo.isGas && leftElementInfo.isSwappable)
         {
-            AddWeightToPositionDictionary(weightedOptions, (x - 1, y), 5);
+            weightedOptions[0, 1] += 5;
         }
 
         // left
         if (leftElementInfo.isSwappable)
         {
-            AddWeightToPositionDictionary(weightedOptions, (x - 1, y), 3);
+            weightedOptions[0, 1] += 3;
         }
         else if (leftElementInfo.isGas && rightElementInfo.isSwappable)
         {
-            AddWeightToPositionDictionary(weightedOptions, (x + 1, y), 5);
+            weightedOptions[2, 1] += 5;
         }
 
 
@@ -146,20 +148,20 @@ public class GasPhysics
         {
             if (Gas.airMolarMass / gas.molarMass < 0.5f)
             {
-                AddWeightToPositionDictionary(weightedOptions, (x, y - 1), 5);
+                weightedOptions[1, 2] += 5;
             }
             else if (Gas.airMolarMass / gas.molarMass < 0.8f)
             {
-                AddWeightToPositionDictionary(weightedOptions, (x, y - 1), 2);
+                weightedOptions[1, 2] += 2;
             }
             else
             {
-                AddWeightToPositionDictionary(weightedOptions, (x, y - 1), 1);
+                weightedOptions[1, 2] += 1;
             }
         }
         else if (bottomElementInfo.isGas && topElementInfo.isSwappable)
         {
-            AddWeightToPositionDictionary(weightedOptions, (x, y + 1), 5);
+            weightedOptions[1, 0] += 5;
         }
 
 
@@ -168,20 +170,20 @@ public class GasPhysics
         {
             if (Gas.airMolarMass / gas.molarMass < 0.5f)
             {
-                AddWeightToPositionDictionary(weightedOptions, (x + 1, y - 1), 5);
+                weightedOptions[2, 2] += 5;
             }
             else if (Gas.airMolarMass / gas.molarMass < 0.8f)
             {
-                AddWeightToPositionDictionary(weightedOptions, (x + 1, y - 1), 2);
+                weightedOptions[2, 2] += 2;
             }
             else
             {
-                AddWeightToPositionDictionary(weightedOptions, (x + 1, y - 1), 1);
+                weightedOptions[2, 2] += 1;
             }
         }
         else if (bottomRightElementInfo.isGas && topLeftElementInfo.isSwappable)
         {
-            AddWeightToPositionDictionary(weightedOptions, (x - 1, y + 1), 5);
+            weightedOptions[0, 0] += 5;
         }
 
 
@@ -190,23 +192,27 @@ public class GasPhysics
         {
             if (Gas.airMolarMass / gas.molarMass < 0.5f)
             {
-                AddWeightToPositionDictionary(weightedOptions, (x - 1, y - 1), 5);
+                weightedOptions[0, 2] += 5;
             }
             else if (Gas.airMolarMass / gas.molarMass < 0.8f)
             {
-                AddWeightToPositionDictionary(weightedOptions, (x - 1, y - 1), 2);
+                weightedOptions[0, 2] += 2;
             }
             else
             {
-                AddWeightToPositionDictionary(weightedOptions, (x - 1, y - 1), 1);
+                weightedOptions[0, 2] += 1;
             }
         }
         else if (bottomLeftElementInfo.isGas && topRightElementInfo.isSwappable)
         {
-            AddWeightToPositionDictionary(weightedOptions, (x + 1, y + 1), 5);
+            weightedOptions[2, 0] += 5;
         }
-
-
+        /* Debug.Log("array");
+         foreach(var i in weightedOptions)
+         {
+             Debug.Log(i);
+         }*/
+        //Debug.Log(weightedOptions[1, 1]);
         return weightedOptions;
     }
 
