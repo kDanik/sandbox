@@ -45,7 +45,9 @@ public class ElementGrid
         checkNextIteration = new bool[width, height];
     }
 
-    // returns positionsChangedThisIteration as array and clears it
+    /// <summary>
+    /// Copies current checkNextIteration array to checkThisIteration and clears checkNextIteration array
+    /// </summary>
     public void PrepareCheckThisIteration()
     {
         checkThisIteration = (bool[,])checkNextIteration.Clone();
@@ -53,25 +55,36 @@ public class ElementGrid
         checkNextIteration = new bool[width, height];
     }
 
-    // returns true if position is in ignore array for this iteration
+    /// <returns>
+    /// returns true if position is in ignoreThisIteration array and should be ignored for calculation this iteration
+    /// </returns>
     public bool IsIgnorePosition(int x, int y)
     {
         return ignoreThisIteration[x, y] == true;
     }
 
-    // returns true if position is in check this iteration array
+    /// <summary>
+    /// Unused! checkThisIteration[x, y] should be accesssed directly for MUCH better performance
+    /// </summary>
+    /// <returns>
+    /// returns true if position is in checkThisIteration array and should be used for physics/reactions calculations this frame
+    /// </returns>
     public bool IsPositionToCheckInCurrentIteration(int x, int y)
     {
         return checkThisIteration[x, y] == true;
     }
 
-    // creates new array for ignoreThisIteration instead existing one
+    /// <returns>
+    /// creates new array for ignoreThisIteration instead existing one
+    /// </returns>
     public void ClearIgnoreThisIterationPositionsList()
     {
         ignoreThisIteration = new bool[width, height];
     }
 
-    // swaps 2 elements if both are in bound. Also works if one of elements is null
+    /// <summary>
+    /// swaps 2 elements if both are in bound. Also works if one of elements is null
+    /// </summary>
     public void SwapElements(int x1, int y1, int x2, int y2)
     {
         if (IsInBounds(x1, y1) && IsInBounds(x2, y2))
@@ -90,8 +103,9 @@ public class ElementGrid
         }
     }
 
-
-    // returns element for given position if in bounds, otherwise returns null
+    /// <returns>
+    /// returns element for given position if in bounds, otherwise returns null
+    /// </returns>
     public BaseElement GetElement(int x, int y)
     {
         if (IsInBounds(x, y))
@@ -104,7 +118,9 @@ public class ElementGrid
         }
     }
 
-    // if position is in bounds and no other element is assigned for it,  sets element and updates pixel color for it
+    /// <summary>
+    /// if position is in bounds and no other element is assigned for it,  sets element and updates pixel color for it
+    /// </summary>
     public void SetElementIfEmpty(int x, int y, BaseElement element)
     {
         if (!ElementPresent(x, y))
@@ -118,7 +134,9 @@ public class ElementGrid
         }
     }
 
-    // if position is in bounds, sets element and updates pixel color for it,
+    /// <summary>
+    /// if position is in bounds, sets element and updates pixel color for it,
+    /// </summary>
     public void SetElement(int x, int y, BaseElement element)
     {
         if (IsInBounds(x, y))
@@ -132,7 +150,9 @@ public class ElementGrid
         }
     }
 
-    // Updates sandboxPixelRenderer pixel for given position
+    /// <summary>
+    /// Updates sandboxPixelRenderer pixel for given position. ApplyCurrentChangesToTexture() should be used to appply changes to texture
+    /// </summary>
     public void UpdateColorValues(int x, int y, BaseElement element)
     {
         if (element != null)
@@ -145,14 +165,18 @@ public class ElementGrid
         }
     }
 
-    // Returns true if position is in bounds of the grid and there is no element present
+
+    /// <returns>
+    /// Returns true if position is in bounds of the grid and there is no element present
+    /// </returns>
     public bool IsInBoundsAndEmpty(int x, int y)
     {
         return x >= 0 && y >= 0 && x < width && y < height && elementGrid[x, y] == null;
     }
 
-
-    // Adds all surounding positions to positionsChangedThisIteration, so their physics calculated next iteration
+    /// <summary>
+    /// Adds all surounding positions to positionsChangedThisIteration, so their physics calculated next iteration
+    /// </summary>
     public void AddSuroundingPositionsToCheckNextIteration(int x, int y)
     {
         // center
@@ -189,19 +213,25 @@ public class ElementGrid
         if (x + 1 < width) checkNextIteration[x + 1, y] = true;
     }
 
-    // Adds one position to positionsChangedThisIteration, so it's physics calculated next iteration
+    /// <summary>
+    /// Adds one position to positionsChangedThisIteration, so it's physics calculated next iteration
+    /// </summary>
     public void AddPositionToCheckNextIteration(int x, int y)
     {
         checkNextIteration[x, y] = true;
     }
 
-    // Returns true if position is in bounds of the grid
+    /// <returns>
+    /// Returns true if position is in bounds of the grid
+    /// </returns>
     public bool IsInBounds(int x, int y)
     {
         return x >= 0 && y >= 0 && x < width && y < height;
     }
 
-    // Returns true if position is in bounds of the grid and there is element present
+    /// <returns>
+    /// Returns true if position is in bounds of the grid and there is element present
+    /// </returns>
     public bool ElementPresent(int x, int y)
     {
         return IsInBounds(x, y) && elementGrid[x, y] != null;
