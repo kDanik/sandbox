@@ -1,10 +1,10 @@
 using UnityEngine;
 
-public class Liquid : BaseElement
+public abstract class Liquid : BaseElement
 {
     private int flowDirection = Random.Range(0, 1);
 
-    public Liquid(uint weight, uint temperature, Color32 color) : base(weight, temperature, color)
+    public Liquid(uint weight, uint temperature, Color32 color, uint elementId) : base(weight, temperature, color, elementId)
     {
     }
 

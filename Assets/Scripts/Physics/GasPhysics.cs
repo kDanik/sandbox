@@ -74,7 +74,7 @@ public class GasPhysics
             // if position has element of type gas,
             // current gas will have more chance to go on oposite position
             // (top element is gas --> more chance for current element to go down)
-            weightedOptions[1, 2] += 5;
+            weightedOptions[1, 2] += 10;
         }
 
 
@@ -96,7 +96,7 @@ public class GasPhysics
         }
         else if (topLeftElementInfo.isGas && bottomRightElementInfo.isSwappable)
         {
-            weightedOptions[2, 2] += 5;
+            weightedOptions[2, 2] += 10;
         }
 
 
@@ -118,7 +118,7 @@ public class GasPhysics
         }
         else if (topRightElementInfo.isGas && bottomLeftElementInfo.isSwappable)
         {
-            weightedOptions[0, 2] += 5;
+            weightedOptions[0, 2] += 10;
         }
 
 
@@ -129,7 +129,7 @@ public class GasPhysics
         }
         else if (rightElementInfo.isGas && leftElementInfo.isSwappable)
         {
-            weightedOptions[0, 1] += 5;
+            weightedOptions[0, 1] += 10;
         }
 
         // left
@@ -139,7 +139,7 @@ public class GasPhysics
         }
         else if (leftElementInfo.isGas && rightElementInfo.isSwappable)
         {
-            weightedOptions[2, 1] += 5;
+            weightedOptions[2, 1] += 10;
         }
 
 
@@ -161,7 +161,7 @@ public class GasPhysics
         }
         else if (bottomElementInfo.isGas && topElementInfo.isSwappable)
         {
-            weightedOptions[1, 0] += 5;
+            weightedOptions[1, 0] += 10;
         }
 
 
@@ -183,7 +183,7 @@ public class GasPhysics
         }
         else if (bottomRightElementInfo.isGas && topLeftElementInfo.isSwappable)
         {
-            weightedOptions[0, 0] += 5;
+            weightedOptions[0, 0] += 10;
         }
 
 
@@ -205,14 +205,8 @@ public class GasPhysics
         }
         else if (bottomLeftElementInfo.isGas && topRightElementInfo.isSwappable)
         {
-            weightedOptions[2, 0] += 5;
+            weightedOptions[2, 0] += 10;
         }
-        /* Debug.Log("array");
-         foreach(var i in weightedOptions)
-         {
-             Debug.Log(i);
-         }*/
-        //Debug.Log(weightedOptions[1, 1]);
         return weightedOptions;
     }
 

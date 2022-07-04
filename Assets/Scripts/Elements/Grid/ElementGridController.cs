@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class ElementGridController : MonoBehaviour
 {
@@ -21,6 +23,8 @@ public class ElementGridController : MonoBehaviour
 
     private ElementSpawner elementSpawner;
 
+    private TimedActions timedActions;
+
     void Start()
     {
         sandboxPixelRenderer = this.gameObject.GetComponent<SandboxPixelRenderer>();
@@ -35,6 +39,8 @@ public class ElementGridController : MonoBehaviour
 
         elementSpawner = new ElementSpawner(elementGrid);
 
+        timedActions = new TimedActions(elementGrid);
+
         sandboxPixelRenderer.ApplyCurrentChangesToTexture();
     }
 
@@ -45,6 +51,8 @@ public class ElementGridController : MonoBehaviour
         // ONLY TEST METHOD
 
         int randomRange = Random.Range(0, 2);
+
+        timedActions.CheckTimedActions();
 
         if (randomRange == 1)
         {
@@ -130,38 +138,9 @@ public class ElementGridController : MonoBehaviour
             if (elementChoosenTest == 0)
             {
                 elementSpawner.Clear(posInGrid.x, posInGrid.y, new QuadSolidBrush());
-            }
-            if (elementChoosenTest == 1)
+            } else
             {
-                elementSpawner.SpawnElement<Water>(posInGrid.x, posInGrid.y, new QuadSolidBrush());
-            }
-            if (elementChoosenTest == 2)
-            {
-                elementSpawner.SpawnElement<Sand>(posInGrid.x, posInGrid.y, new QuadSolidBrush());
-            }
-            if (elementChoosenTest == 3)
-            {
-                elementSpawner.SpawnElement<Stone>(posInGrid.x, posInGrid.y, new QuadSolidBrush());
-            }
-            if (elementChoosenTest == 4)
-            {
-                elementSpawner.SpawnElement<Oil>(posInGrid.x, posInGrid.y, new QuadSolidBrush());
-            }
-            if (elementChoosenTest == 5)
-            {
-                elementSpawner.SpawnElement<Methane>(posInGrid.x, posInGrid.y, new QuadSolidBrush());
-            }
-            if (elementChoosenTest == 6)
-            {
-                elementSpawner.SpawnElement<Propane>(posInGrid.x, posInGrid.y, new QuadSolidBrush());
-            }
-            if (elementChoosenTest == 7)
-            {
-                elementSpawner.SpawnElement<Smoke>(posInGrid.x, posInGrid.y, new QuadSolidBrush());
-            }
-            if (elementChoosenTest == 8)
-            {
-                elementSpawner.SpawnElement<ColoredTestGas>(posInGrid.x, posInGrid.y, new QuadSolidBrush());
+                elementSpawner.SpawnElement(posInGrid.x, posInGrid.y, new QuadSolidBrush(), Elements.elementsTypes[elementChoosenTest]);
             }
         }
     }

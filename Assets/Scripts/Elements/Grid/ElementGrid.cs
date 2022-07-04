@@ -98,6 +98,20 @@ public class ElementGrid
             AddSuroundingPositionsToCheckNextIteration(x1, y1);
             AddSuroundingPositionsToCheckNextIteration(x2, y2);
 
+            if (elementGrid[x2, y2] != null)
+            {
+                elementGrid[x2, y2].x = x2;
+                elementGrid[x2, y2].y = y2;
+            }
+
+
+            if (elementGrid[x1, y1] != null)
+            {
+                elementGrid[x1, y1].x = x1;
+                elementGrid[x1, y1].y = y1;
+            }
+
+
             UpdateColorValues(x2, y2, elementGrid[x2, y2]);
             UpdateColorValues(x1, y1, elementGrid[x1, y1]);
         }
@@ -125,6 +139,9 @@ public class ElementGrid
     {
         if (!ElementPresent(x, y))
         {
+            element.x = x;
+            element.y = y;
+
             elementGrid[x, y] = element;
 
             ignoreThisIteration[x, y] = true;
@@ -141,7 +158,15 @@ public class ElementGrid
     {
         if (IsInBounds(x, y))
         {
+            if (element != null) {
+                element.x = x;
+                element.y = y;
+            }
+
+            if (elementGrid[x, y] != null) elementGrid[x, y].Destroy(this);
+
             elementGrid[x, y] = element;
+
 
             ignoreThisIteration[x, y] = true;
             AddSuroundingPositionsToCheckNextIteration(x, y);
@@ -161,7 +186,7 @@ public class ElementGrid
         }
         else
         {
-            sandboxPixelRenderer.SetPixel(x, y, new Color32(0,0,0,0));
+            sandboxPixelRenderer.SetPixel(x, y, new Color32(0, 0, 0, 0));
         }
     }
 

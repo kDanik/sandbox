@@ -367,8 +367,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1258861584}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 9.8328, y: 4.8386, z: 10}
-  m_LocalScale: {x: 21.777227, y: 11.0235815, z: 1}
+  m_LocalPosition: {x: 9.8328, y: 4.7874, z: 10}
+  m_LocalScale: {x: 21.777227, y: 11.125333, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -447,6 +447,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pixelSizeInUnityUnits: 0.04
-  width: 438
+  width: 435
   height: 245
   elementChoosenTest: 2

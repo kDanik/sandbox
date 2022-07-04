@@ -2,7 +2,7 @@
 
 public class Water : Liquid
 {
-    public Water() : base(1000, RoomTemperature, CreateRandomWaterColor())
+    public Water() : base(1000, RoomTemperature, CreateRandomWaterColor(), Elements.waterId)
     {
     }
 

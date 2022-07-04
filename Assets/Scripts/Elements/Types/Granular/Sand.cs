@@ -2,7 +2,7 @@
 
 public class Sand : GranularMaterial
 {
-    public Sand() : base(1540, RoomTemperature, CreateRandomSandColor())
+    public Sand() : base(1540, RoomTemperature, CreateRandomSandColor(), Elements.sandId)
     {
     }
 

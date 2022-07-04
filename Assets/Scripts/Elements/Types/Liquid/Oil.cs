@@ -2,7 +2,7 @@
 
 public class Oil : Liquid
 {
-    public Oil() : base(750, RoomTemperature, CreateRandomOilColor())
+    public Oil() : base(750, RoomTemperature, CreateRandomOilColor(), Elements.oilId)
     {
     }
 

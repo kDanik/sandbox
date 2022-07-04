@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 
 public class WeightedRandom
 {
@@ -19,7 +18,6 @@ public class WeightedRandom
             }
         }
            
-        
 
         uint randomValue = (uint)Random.Range(1, weightSum);
 

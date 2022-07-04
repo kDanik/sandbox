@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class GranularMaterial : BaseElement
+public abstract class GranularMaterial : BaseElement
 {
-    public GranularMaterial(uint weight, uint temperature, Color32 color) : base(weight, temperature, color)
+    public GranularMaterial(uint weight, uint temperature, Color32 color, uint elementId) : base(weight, temperature, color, elementId)
     {
     }
 }

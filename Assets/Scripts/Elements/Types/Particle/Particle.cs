@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class Particle : BaseElement
+public abstract class Particle : BaseElement
 {
-    public Particle(uint weight, uint temperature, Color32 color) : base(weight, temperature, color)
+    public Particle(uint weight, uint temperature, Color32 color, uint elementId) : base(weight, temperature, color, elementId)
     {
     }
 }

@@ -2,7 +2,7 @@
 
 public class Propane : Gas
 {
-    public Propane() : base(44.1f, RoomTemperature, CreateRandomPropaneColor())
+    public Propane() : base(44.1f, RoomTemperature, CreateRandomPropaneColor(), Elements.propaneId)
     {
     }
 

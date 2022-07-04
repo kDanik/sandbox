@@ -10,11 +10,11 @@ public class ElementSpawner
         this.elementGrid = elementGrid;
     }
 
-    public void SpawnElement<ElementType>(int x, int y, IBrush brush)
+    public void SpawnElement(int x, int y, IBrush brush, Type elementType)
     {
         foreach (Vector2Int position in brush.GetPositions(x, y))
         {
-            elementGrid.SetElement(position.x, position.y, Activator.CreateInstance<ElementType>() as BaseElement);
+            elementGrid.SetElement(position.x, position.y, Activator.CreateInstance(elementType) as BaseElement);
         }
     }
 

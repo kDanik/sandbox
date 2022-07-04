@@ -2,7 +2,7 @@
 
 public class Methane : Gas
 {
-    public Methane() : base(16.04f, RoomTemperature, CreateRandomMethaneColor())
+    public Methane() : base(16.04f, RoomTemperature, CreateRandomMethaneColor(), Elements.methaneId)
     {
     }
 
