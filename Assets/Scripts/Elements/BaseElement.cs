@@ -3,24 +3,43 @@ using UnityEngine;
 
 public abstract class BaseElement
 {
-    // TODO maybe element id/name and it's type should be added here to improve performance by far by reducing ammount of casting needed
-    // TODO maybe it should also have position stored here to simplify a lot of code
-
+    ///<summary>
+    /// Elements position in elementGrid
+    ///</summary>
     public int x;
+    
+    ///<summary>
+    /// Elements position in elementGrid
+    ///</summary>
     public int y;
-
-    private bool isOnGrid = true;
-
+    
+    ///<summary>
+    /// Unique elements type id (check Elements.cs). Is relevant mostly for reactions calculations
+    ///</summary>
     public uint elementTypeId = 0;
-
-    // Unit Weight (Kg/m3)
+    
+    ///<summary>
+    /// Unit Weight (Kg/m3). Is relevant mostly for physics calculations
+    ///</summary>
     public uint weight;
 
-    // Kelvin
+    ///<summary>
+    /// Tempreture in Kelvin. Currently unused!
+    ///</summary>
     public uint temperature;
 
+    ///<summary>
+    /// Color of pixel representing this element. Changing this color directly will not do anything, it should be modified via ElementGrid
+    ///</summary>
     public Color32 color;
-
+    
+    ///<summary>
+    /// Indicates if element is currently in elementGrid and not deleted. 
+    /// Relevant mostly for TimedActions because they can reference elements that are removed from grid
+    ///</summary>
+    private bool isOnGrid = true;
+    
+    
     public const uint RoomTemperature = 293;
 
     public BaseElement(uint weight, uint temperature, Color color, uint elementTypeId)
@@ -35,6 +54,9 @@ public abstract class BaseElement
         throw new NotImplementedException();
     }
 
+    ///<summary>
+    /// Marks element as not on grid, so TimedActions will not execute action for deleted elements
+    ///</summary>
     public void Destroy(ElementGrid elementGrid)
     {
         x = -100;
