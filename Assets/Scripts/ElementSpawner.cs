@@ -10,7 +10,7 @@ public class ElementSpawner
         this.elementGrid = elementGrid;
     }
 
-    public void SpawnElement(int x, int y, IBrush brush, Type elementType)
+    public void SpawnElement(int x, int y, AbstractBrush brush, Type elementType)
     {
         foreach (Vector2Int position in brush.GetPositions(x, y))
         {
@@ -19,7 +19,7 @@ public class ElementSpawner
     }
 
 
-    public void Clear(int x, int y, IBrush brush)
+    public void Clear(int x, int y, AbstractBrush brush)
     {
         foreach (Vector2Int position in brush.GetPositions(x, y))
         {

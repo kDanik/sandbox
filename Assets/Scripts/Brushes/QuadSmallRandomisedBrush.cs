@@ -1,7 +1,7 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class QuadSolidBrush : AbstractBrush
+public class QuadSmallRandomisedBrush : AbstractBrush
 {
     public override List<Vector2Int> GetPositions(int x, int y)
     {
@@ -11,7 +11,7 @@ public class QuadSolidBrush : AbstractBrush
         {
             for (int yTemp = y - smallBrushSize; yTemp <= y + smallBrushSize; yTemp++)
             {
-                positions.Add(new Vector2Int(xTemp, yTemp));
+                if (Random.Range(1, 4) == 1) positions.Add(new Vector2Int(xTemp, yTemp));
             }
         }
 

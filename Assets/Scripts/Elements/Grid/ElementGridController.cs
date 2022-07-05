@@ -19,6 +19,9 @@ public class ElementGridController : MonoBehaviour
     [SerializeField]
     private int elementChoosenTest = 1;
 
+    [SerializeField]
+    private int brushChoosenTest = 1;
+
     private ElementGrid elementGrid;
 
     private ElementSpawner elementSpawner;
@@ -129,10 +132,8 @@ public class ElementGridController : MonoBehaviour
     }
     public void SpawnBlocks()
     {
-        // ONLY TEST METHOD
-        List<Vector2Int> inputPositions = new List<Vector2Int>();
+        List<Vector2Int> inputPositions = GetWindowsInput();
 
-        inputPositions = GetWindowsInput();
         foreach (Vector2Int posInGrid in inputPositions)
         {
             if (elementChoosenTest == 0)
@@ -140,7 +141,7 @@ public class ElementGridController : MonoBehaviour
                 elementSpawner.Clear(posInGrid.x, posInGrid.y, new QuadSolidBrush());
             } else
             {
-                elementSpawner.SpawnElement(posInGrid.x, posInGrid.y, new QuadSolidBrush(), Elements.elementsTypes[elementChoosenTest]);
+                elementSpawner.SpawnElement(posInGrid.x, posInGrid.y, Brushes.brushes[brushChoosenTest], Elements.elementsTypes[elementChoosenTest]);
             }
         }
     }
