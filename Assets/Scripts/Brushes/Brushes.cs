@@ -5,6 +5,7 @@ public static class Brushes
     public static readonly List<AbstractBrush> brushes = new()
     {
         new QuadSmallRandomisedBrush(),
-        new QuadSolidBrush()
+        new QuadSolidBrush(),
+        new QuadBigBrush()
     };
 }
