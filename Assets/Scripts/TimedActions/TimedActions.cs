@@ -6,45 +6,49 @@ public class TimedActions
 {
     private ElementGrid elementGrid;
 
-    private static List<(uint iterationsBeforeAction, BaseElement element)> timedActions = new(10000);
+    private static Queue<(uint iterationsBeforeAction, BaseElement element)> timedActions = new(10000);
+
 
     public TimedActions(ElementGrid elementGrid)
     {
         this.elementGrid = elementGrid;
     }
 
+
     public static void AddTimedAction(uint iterationsBeforeAction, BaseElement element)
     {
         if (iterationsBeforeAction == 0 || element == null) throw new ArgumentException();
 
-        timedActions.Add((iterationsBeforeAction, element));
+        timedActions.Enqueue((iterationsBeforeAction, element));
     }
 
+
+    // TODO this is quite slow! maybe
+    // i have to write my own queue or use linkedlist??
     public void CheckTimedActions()
     {
-        for (int i = 0; i < timedActions.Count; i++)
+        int currentCount = timedActions.Count;
+
+        for (int i = 0; i < currentCount; i++)
         {
-            var timedAction = timedActions[i];
+            var currentTimedAction = timedActions.Dequeue();
 
-            if (timedAction.element == null || !timedAction.element.IsOnElementGrid())
+            if (currentTimedAction.element == null || !currentTimedAction.element.IsOnElementGrid())
             {
-                timedActions.RemoveAt(i);
+                continue;
+            }
+
+            currentTimedAction.iterationsBeforeAction--;
+
+
+            if (currentTimedAction.iterationsBeforeAction <= 0)
+            {
+                currentTimedAction.element.TimedAction(elementGrid);
 
                 continue;
             }
 
-            timedAction.iterationsBeforeAction--;
-
-
-            if (timedAction.iterationsBeforeAction <= 0)
-            {
-                timedAction.element.TimedAction(elementGrid);
-                timedActions.RemoveAt(i);
-
-                continue;
-            }
-
-            timedActions[i] = timedAction;
+            timedActions.Enqueue(currentTimedAction);
         }
     }
 }
