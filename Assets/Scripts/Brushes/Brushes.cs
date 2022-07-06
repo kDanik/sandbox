@@ -6,6 +6,7 @@ public static class Brushes
     {
         new QuadSmallRandomisedBrush(),
         new QuadSolidBrush(),
-        new QuadBigBrush()
+        new QuadBigBrush(),
+        new QuadBigRandomisedBrush()
     };
 }
