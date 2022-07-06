@@ -6,6 +6,10 @@ public class Wood : Solid
     {
     }
 
+    public Wood(Color32 color) : base(1500, RoomTemperature, color, Elements.woodId)
+    {
+    }
+
     private static Color32 CreateRandomWoodColor()
     {
         byte red = (byte)Random.Range(130, 160);

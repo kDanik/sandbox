@@ -11,7 +11,7 @@ public class QuadSmallRandomisedBrush : AbstractBrush
         {
             for (int yTemp = y - smallBrushSize; yTemp <= y + smallBrushSize; yTemp++)
             {
-                if (Random.Range(1, 4) == 1) positions.Add(new Vector2Int(xTemp, yTemp));
+                if (Random.Range(1, 5) == 1) positions.Add(new Vector2Int(xTemp, yTemp));
             }
         }
 

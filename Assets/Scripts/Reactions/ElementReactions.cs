@@ -27,7 +27,6 @@ public class ElementReactions
     // (sometimes reactions could return false on success too)
     private bool CheckReactionWithAdjacentElement(BaseElement centerElement, int xAdjacent, int yAdjacent, DirectionHelper adjacentElementDirection)
     {
-  
         BaseElement adjacentElement = elementGrid.GetElement(xAdjacent, yAdjacent);
 
         if (adjacentElement == null) return false;
@@ -77,6 +76,40 @@ public class ElementReactions
             return true;
         }
 
+
+        // fire - water
+        if (centerElement.elementTypeId == Elements.fireId && adjacentElement.elementTypeId == Elements.waterId)
+        {
+            ReactionFireWithWater(centerElement, adjacentElement);
+            return true;
+        }
+
+        if (centerElement.elementTypeId == Elements.waterId && adjacentElement.elementTypeId == Elements.fireId)
+        {
+            ReactionFireWithWater(adjacentElement, centerElement);
+            return true;
+        }
+
+        // steam - solid 
+        if (centerElement.elementTypeId == Elements.steamId && adjacentElement is Solid)
+        {
+            ReactionSteamWithSolid(centerElement);
+            return true;
+        }
+
+        // water - burning wood 
+        if (centerElement.elementTypeId == Elements.waterId && adjacentElement.elementTypeId == Elements.burningWoodId)
+        {
+            ReactionFireWithWater(adjacentElement, centerElement);
+            return true;
+        }
+
+        if (centerElement.elementTypeId == Elements.burningWoodId && adjacentElement.elementTypeId == Elements.waterId)
+        {
+            ReactionFireWithWater(centerElement, adjacentElement);
+            return true;
+        }
+
         return false;
     }
 
@@ -96,6 +129,18 @@ public class ElementReactions
 
     private void ReactionFireWithWater(BaseElement fire, BaseElement water)
     {
-        elementGrid.SetElement(fire.x, fire.y, new BurningWood());
+        elementGrid.SetElement(fire.x, fire.y, null);
+        elementGrid.SetElement(water.x, water.y, new Steam());
+    }
+
+    private void ReactionBurningWoodWithWater(BaseElement burningWood, BaseElement water)
+    {
+        elementGrid.SetElement(burningWood.x, burningWood.y, new Wood(burningWood.GetColor()));
+        elementGrid.SetElement(water.x, water.y, new Steam());
+    }
+
+    private void ReactionSteamWithSolid(BaseElement steam)
+    {
+        TimedActions.AddTimedAction((uint)Random.Range(4, 10), steam);
     }
 }
