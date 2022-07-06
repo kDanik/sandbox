@@ -58,7 +58,7 @@ public class GasPhysics
             // (lighter --> more chance for going up)
             if (Gas.airMolarMass / gas.molarMass > 2)
             {
-                weightedOptions[1, 0] += 5;
+                weightedOptions[1, 0] += 10;
             }
             else if (Gas.airMolarMass / gas.molarMass > 1.1f)
             {
@@ -83,7 +83,7 @@ public class GasPhysics
         {
             if (Gas.airMolarMass / gas.molarMass > 2)
             {
-                weightedOptions[0, 0] += 5;
+                weightedOptions[0, 0] += 10;
             }
             else if (Gas.airMolarMass / gas.molarMass > 1.1f)
             {
@@ -105,7 +105,7 @@ public class GasPhysics
         {
             if (Gas.airMolarMass / gas.molarMass > 2)
             {
-                weightedOptions[2, 0] += 5;
+                weightedOptions[2, 0] += 10;
             }
             else if (Gas.airMolarMass / gas.molarMass > 1.1f)
             {

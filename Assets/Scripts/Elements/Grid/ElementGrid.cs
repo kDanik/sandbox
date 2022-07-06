@@ -137,7 +137,7 @@ public class ElementGrid
     /// </summary>
     public void SetElementIfEmpty(int x, int y, BaseElement element)
     {
-        if (!ElementPresent(x, y))
+        if (IsInBounds(x,y) && elementGrid[x, y] == null)
         {
             element.x = x;
             element.y = y;
@@ -182,7 +182,7 @@ public class ElementGrid
     {
         if (element != null)
         {
-            sandboxPixelRenderer.SetPixel(x, y, element.color);
+            sandboxPixelRenderer.SetPixel(x, y, element.GetColor());
         }
         else
         {

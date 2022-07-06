@@ -16,6 +16,6 @@ public class Smoke : Gas
 
     public override void TimedAction(ElementGrid elementGrid)
     {
-        elementGrid.SetElement(this.x, this.y, null);
+        elementGrid.SetElement(x, y, null);
     }
 }

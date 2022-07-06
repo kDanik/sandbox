@@ -7,10 +7,10 @@ public class Oil : Liquid
     }
 
     private static Color32 CreateRandomOilColor()
-    {
+    {   
         byte red = (byte)Random.Range(200, 255);
         byte green = (byte)Random.Range(200, 255);
 
-        return new Color32(red, green, 0, 125);
+        return new Color32(red, green, 0, 80);
     }
 }

@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 public class Fire : Gas
 {
-    public Fire() : base(16.04f, 1900, CreateRandomFireColor(), Elements.fireId)
+    public Fire() : base(10f, 1900, CreateRandomFireColor(), Elements.fireId)
     {
-        TimedActions.AddTimedAction((uint)Random.Range(90, 150), this);
+        TimedActions.AddTimedAction((uint)Random.Range(30, 50), this);
     }
 
     private static Color32 CreateRandomFireColor()
@@ -16,6 +16,13 @@ public class Fire : Gas
 
     public override void TimedAction(ElementGrid elementGrid)
     {
-        elementGrid.SetElement(this.x, this.y, new Smoke());
+        if (Random.Range(1, 5) == 1)
+        {
+            elementGrid.SetElement(x, y, new Smoke());
+        }
+        else
+        {
+            elementGrid.SetElement(x, y, null);
+        }
     }
 }

@@ -31,7 +31,7 @@ public abstract class BaseElement
     ///<summary>
     /// Color of pixel representing this element. Changing this color directly will not do anything, it should be modified via ElementGrid
     ///</summary>
-    public Color32 color;
+    private Color32 color;
     
     ///<summary>
     /// Indicates if element is currently in elementGrid and not deleted. 
@@ -63,6 +63,17 @@ public abstract class BaseElement
         y = -100;
 
         isOnGrid = false;
+    }
+
+    public void ChangeElementsColor(ElementGrid elementGrid, Color32 newColor)
+    {
+        color = newColor;
+        elementGrid.UpdateColorValues(x, y, this);
+    }
+
+    public Color32 GetColor()
+    {
+        return color;
     }
 
     public bool IsOnElementGrid() {
