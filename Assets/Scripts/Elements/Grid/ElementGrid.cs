@@ -34,6 +34,9 @@ public class ElementGrid
     private readonly int height;
     private readonly int width;
 
+    // border width
+    private readonly int borderWidth = 2;
+
     public ElementGrid(int width, int height, SandboxPixelRenderer sandboxPixelRenderer)
     {
         this.height = height;
@@ -43,6 +46,22 @@ public class ElementGrid
         elementGrid = new BaseElement[width, height];
         ignoreThisIteration = new bool[width, height];
         checkNextIteration = new bool[width, height];
+
+        CreateGridBorder();
+    }
+
+    private void CreateGridBorder() {
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                if (!IsInBounds(x, y))
+                {
+                    elementGrid[x, y] = new Border();
+                    UpdateColorValues(x, y, elementGrid[x, y]);
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -122,7 +141,7 @@ public class ElementGrid
     /// </returns>
     public BaseElement GetElement(int x, int y)
     {
-        if (IsInBounds(x, y))
+        if (IsInBoundsIncludingBorder(x, y))
         {
             return elementGrid[x, y];
         }
@@ -196,7 +215,7 @@ public class ElementGrid
     /// </returns>
     public bool IsInBoundsAndEmpty(int x, int y)
     {
-        return x >= 0 && y >= 0 && x < width && y < height && elementGrid[x, y] == null;
+        return x >= borderWidth && y >= borderWidth && x < width - borderWidth && y < height - borderWidth && elementGrid[x, y] == null;
     }
 
     /// <summary>
@@ -207,35 +226,35 @@ public class ElementGrid
         // center
         checkNextIteration[x, y] = true;
 
-        if (y > 0)
+        if (y > borderWidth)
         {
             // down
             checkNextIteration[x, y - 1] = true;
 
             // right down
-            if (x + 1 < width) checkNextIteration[x + 1, y - 1] = true;
+            if (x + 1 < width - borderWidth) checkNextIteration[x + 1, y - 1] = true;
 
             // left bottom
-            if (x > 0) checkNextIteration[x - 1, y - 1] = true;
+            if (x > borderWidth) checkNextIteration[x - 1, y - 1] = true;
         }
 
-        if (y + 1 < height)
+        if (y + 1 < height - borderWidth)
         {
             // top
             checkNextIteration[x, y + 1] = true;
 
             // right top
-            if (x + 1 < width) checkNextIteration[x + 1, y + 1] = true;
+            if (x + 1 < width - borderWidth) checkNextIteration[x + 1, y + 1] = true;
 
             // left top
-            if (x > 0) checkNextIteration[x - 1, y + 1] = true;
+            if (x > borderWidth) checkNextIteration[x - 1, y + 1] = true;
         }
 
 
         // left
-        if (x > 0) checkNextIteration[x - 1, y] = true;
+        if (x > borderWidth) checkNextIteration[x - 1, y] = true;
         // right
-        if (x + 1 < width) checkNextIteration[x + 1, y] = true;
+        if (x + 1 < width - borderWidth) checkNextIteration[x + 1, y] = true;
     }
 
     /// <summary>
@@ -250,6 +269,14 @@ public class ElementGrid
     /// Returns true if position is in bounds of the grid
     /// </returns>
     public bool IsInBounds(int x, int y)
+    {
+        return x >= borderWidth && y >= borderWidth && x < width - borderWidth && y < height - borderWidth; 
+    }
+
+    /// <returns>
+    /// Returns true if position is in bounds of the grid
+    /// </returns>
+    public bool IsInBoundsIncludingBorder(int x, int y)
     {
         return x >= 0 && y >= 0 && x < width && y < height;
     }
