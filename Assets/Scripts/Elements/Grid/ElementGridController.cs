@@ -107,6 +107,28 @@ public class ElementGridController : MonoBehaviour
     }
 
 
+    // test method!!!
+    public void ChangeElement() {
+        if (Elements.elementsTypes.Count <= elementChoosenTest + 2)
+        {
+            elementChoosenTest = 0;
+            return;
+        }
+        elementChoosenTest++;
+    }
+
+    // test method!!!
+    public void ChangeBrush()
+    {
+        if (Brushes.brushes.Count <= elementChoosenTest + 2)
+        {
+            brushChoosenTest = 0;
+            return;
+        }
+        brushChoosenTest++;
+    }
+
+
     public List<Vector2Int> GetWindowsInput()
     {
         // ONLY TEST METHOD

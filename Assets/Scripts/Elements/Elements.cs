@@ -34,6 +34,6 @@ public static class Elements
     public const uint burningOilId = 9;
     public const uint woodId = 10;
     public const uint burningWoodId = 11;
-    public const uint ashId = 11;
-    public const uint steamId = 12;
+    public const uint ashId = 12;
+    public const uint steamId = 13;
 }
