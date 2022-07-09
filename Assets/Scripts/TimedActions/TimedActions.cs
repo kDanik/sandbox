@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class TimedActions
 {
-    private ElementGrid elementGrid;
+    private readonly ElementGrid elementGrid;
 
-    private static Queue<(uint iterationsBeforeAction, BaseElement element)> timedActions = new(10000);
+    private static LinkedList<TimedAction> timedActions = new();
 
 
     public TimedActions(ElementGrid elementGrid)
@@ -19,36 +19,39 @@ public class TimedActions
     {
         if (iterationsBeforeAction == 0 || element == null) throw new ArgumentException();
 
-        timedActions.Enqueue((iterationsBeforeAction, element));
+        timedActions.AddFirst(new LinkedListNode<TimedAction>(new TimedAction(element, iterationsBeforeAction)));
     }
 
-
-    // TODO this is quite slow! maybe
-    // i have to write my own queue or use linkedlist??
     public void CheckTimedActions()
     {
-        int currentCount = timedActions.Count;
+        LinkedListNode<TimedAction> currentNode = timedActions.First;
 
-        for (int i = 0; i < currentCount; i++)
+        while (currentNode != null)
         {
-            var currentTimedAction = timedActions.Dequeue();
-
-            if (currentTimedAction.element == null || !currentTimedAction.element.IsOnElementGrid())
+            if (currentNode.Value.element == null || !currentNode.Value.element.IsOnElementGrid())
             {
-                continue;
-            }
-
-            currentTimedAction.iterationsBeforeAction--;
-
-
-            if (currentTimedAction.iterationsBeforeAction <= 0)
-            {
-                currentTimedAction.element.TimedAction(elementGrid);
+                var nextNode = currentNode.Next;
+                timedActions.Remove(currentNode);
+                currentNode = nextNode;
 
                 continue;
             }
 
-            timedActions.Enqueue(currentTimedAction);
+            currentNode.Value.iterationsBeforeAction--;
+
+            if (currentNode.Value.iterationsBeforeAction <= 0)
+            {
+                currentNode.Value.element.TimedAction(elementGrid);
+
+                var nextNode = currentNode.Next;
+                timedActions.Remove(currentNode);
+                currentNode = nextNode;
+
+                continue;
+            }
+
+            currentNode = currentNode.Next;
         }
+
     }
 }
