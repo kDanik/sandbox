@@ -17,7 +17,12 @@ public abstract class BaseElement
     /// Unique elements type id (check Elements.cs). Is relevant mostly for reactions calculations
     ///</summary>
     public uint elementTypeId = 0;
-    
+
+    ///<summary>
+    /// Unique elements physics type id (check Gas.cs,Solid.cs, Liquid.cs and etc).
+    ///</summary>
+    private uint elementPhysicsTypeId = 0;
+
     ///<summary>
     /// Unit Weight (Kg/m3). Is relevant mostly for physics calculations
     ///</summary>
@@ -42,12 +47,13 @@ public abstract class BaseElement
     
     public const uint RoomTemperature = 293;
 
-    public BaseElement(uint weight, uint temperature, Color color, uint elementTypeId)
+    public BaseElement(uint weight, uint temperature, Color color, uint elementTypeId, uint elementPhysicsTypeId)
     {
         this.weight = weight;
         this.temperature = temperature;
         this.color = color;
         this.elementTypeId = elementTypeId;
+        this.elementPhysicsTypeId = elementPhysicsTypeId;
     }
 
     public virtual void TimedAction(ElementGrid elementGrid) {
@@ -78,5 +84,29 @@ public abstract class BaseElement
 
     public bool IsOnElementGrid() {
         return isOnGrid;
+    }
+
+    public bool IsSolid() {
+        return elementPhysicsTypeId == Solid.solidPhysicsId;
+    }
+
+    public bool IsGas()
+    {
+        return elementPhysicsTypeId == Gas.gasPhysicsId;
+    }
+
+    public bool IsLiquid()
+    {
+        return elementPhysicsTypeId == Liquid.liquidPhysicsId;
+    }
+
+    public bool IsParticle()
+    {
+        return elementPhysicsTypeId == Particle.particlePhysicsId;
+    }
+
+    public bool IsGranular()
+    {
+        return elementPhysicsTypeId == GranularMaterial.granularPhysicsId;
     }
 }

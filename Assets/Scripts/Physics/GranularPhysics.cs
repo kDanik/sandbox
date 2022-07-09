@@ -203,7 +203,7 @@ public class GranularPhysics
             return elementInfo;
         }
 
-        BaseElement elementToSwapWith = elementGrid.GetElement(x, y);
+        BaseElement elementToSwapWith = elementGrid.GetElementUnsafe(x, y);
 
         // if in bounds and element is null, then position is free and swapable
         if (elementToSwapWith == null)
@@ -216,10 +216,7 @@ public class GranularPhysics
 
 
         // if in bounds and element is  not null, but is gas or liquid, then position is swappable
-
-        // TODO casting like that could be optimised if new variable responsible for type would be introduced in BaseElement
-        // using it like that hundreds times per iteration is just slow
-        if (elementToSwapWith is Liquid || elementToSwapWith is Gas)
+        if (elementToSwapWith.IsLiquid() || elementToSwapWith.IsGas())
         {
             elementInfo.isSwappable = true;
             elementInfo.isLiquidOrGas = true;

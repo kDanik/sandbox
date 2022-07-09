@@ -37,6 +37,7 @@ public class ElementGrid
     // border width
     private readonly int borderWidth = 2;
 
+
     public ElementGrid(int width, int height, SandboxPixelRenderer sandboxPixelRenderer)
     {
         this.height = height;
@@ -44,6 +45,7 @@ public class ElementGrid
         this.sandboxPixelRenderer = sandboxPixelRenderer;
 
         elementGrid = new BaseElement[width, height];
+
         ignoreThisIteration = new bool[width, height];
         checkNextIteration = new bool[width, height];
 
@@ -150,6 +152,16 @@ public class ElementGrid
             return null;
         }
     }
+
+    /// <returns>
+    /// UNSAFE version of GetElement. Will NOT check if position is in bounds. Should be ONLY used if position are checked before
+    /// returns element for given position,
+    /// </returns>
+    public BaseElement GetElementUnsafe(int x, int y)
+    {
+        return elementGrid[x, y];
+    }
+
 
     /// <summary>
     /// if position is in bounds and no other element is assigned for it,  sets element and updates pixel color for it
@@ -266,7 +278,7 @@ public class ElementGrid
     }
 
     /// <returns>
-    /// Returns true if position is in bounds of the grid
+    /// Returns true if position is in bounds of the grid (excluding border)
     /// </returns>
     public bool IsInBounds(int x, int y)
     {
@@ -274,7 +286,7 @@ public class ElementGrid
     }
 
     /// <returns>
-    /// Returns true if position is in bounds of the grid
+    /// Returns true if position is in bounds of the grid (including border)
     /// </returns>
     public bool IsInBoundsIncludingBorder(int x, int y)
     {

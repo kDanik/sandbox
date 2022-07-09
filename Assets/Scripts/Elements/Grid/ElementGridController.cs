@@ -66,7 +66,7 @@ public class ElementGridController : MonoBehaviour
 
                     if (!elementGrid.checkThisIteration[x, y]) continue;
 
-                    BaseElement element = elementGrid.GetElement(x, y);
+                    BaseElement element = elementGrid.GetElementUnsafe(x, y);
 
                     if (element == null) continue;
 
@@ -84,7 +84,7 @@ public class ElementGridController : MonoBehaviour
                 {
                     if (!elementGrid.checkThisIteration[x, y]) continue;
 
-                    BaseElement element = elementGrid.GetElement(x, y);
+                    BaseElement element = elementGrid.GetElementUnsafe(x, y);
 
                     if (element == null) continue;
 

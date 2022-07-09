@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
-using Random = UnityEngine.Random;
-
-public class GasPhysics
+﻿public class GasPhysics
 {
     private ElementGrid elementGrid;
 
@@ -210,18 +205,6 @@ public class GasPhysics
         return weightedOptions;
     }
 
-    private void AddWeightToPositionDictionary(Dictionary<(int x, int y), uint> dictionary, (int x, int y) position, uint weight)
-    {
-        if (dictionary.ContainsKey(position))
-        {
-            dictionary[position] += weight;
-        }
-        else
-        {
-            dictionary[position] = weight;
-        }
-    }
-
 
     struct ElementInfo
     {
@@ -243,7 +226,7 @@ public class GasPhysics
             return elementInfo;
         }
 
-        BaseElement elementToSwapWith = elementGrid.GetElement(x, y);
+        BaseElement elementToSwapWith = elementGrid.GetElementUnsafe(x, y);
 
         // if in bounds and element is null, then position is free and swapable
         if (elementToSwapWith == null)
@@ -253,19 +236,19 @@ public class GasPhysics
 
             return elementInfo;
         }
-        else if (elementToSwapWith is Gas)
+
+        if (elementToSwapWith.IsGas())
         {
             elementInfo.isSwappable = false;
             elementInfo.isGas = true;
 
             return elementInfo;
         }
-        else
-        {
-            elementInfo.isSwappable = false;
-            elementInfo.isGas = false;
 
-            return elementInfo;
-        }
+        elementInfo.isSwappable = false;
+        elementInfo.isGas = false;
+
+        return elementInfo;
+        
     }
 }

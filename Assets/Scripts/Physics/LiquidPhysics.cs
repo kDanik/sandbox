@@ -145,11 +145,11 @@
     {
         if (!elementGrid.IsInBounds(x, y)) return false;
 
-        BaseElement elementToSwapWith = elementGrid.GetElement(x, y);
+        BaseElement elementToSwapWith = elementGrid.GetElementUnsafe(x, y);
 
         if (elementToSwapWith == null) return true;
 
-        if (elementToSwapWith is Gas) return true;
+        if (elementToSwapWith.IsGas()) return true;
 
 
         if (elementToSwapWith is Liquid liquidToSwapWith && liquidToSwapWith.weight < element.weight) return true;

@@ -2,9 +2,11 @@ using UnityEngine;
 
 public abstract class Liquid : BaseElement
 {
+    public const uint liquidPhysicsId = 3;
+
     private int flowDirection = Random.Range(0, 1);
 
-    public Liquid(uint weight, uint temperature, Color32 color, uint elementId) : base(weight, temperature, color, elementId)
+    public Liquid(uint weight, uint temperature, Color32 color, uint elementId) : base(weight, temperature, color, elementId, liquidPhysicsId)
     {
     }
 
