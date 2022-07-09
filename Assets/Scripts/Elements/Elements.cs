@@ -19,7 +19,8 @@ public static class Elements
         typeof(Wood),
         typeof(BurningWood),
         typeof(Ash),
-        typeof(Steam)
+        typeof(Steam),
+        typeof(Fuse)
     };
 
     // element ids (idk how this can be done better :(( 
@@ -36,4 +37,5 @@ public static class Elements
     public const uint burningWoodId = 11;
     public const uint ashId = 12;
     public const uint steamId = 13;
+    public const uint fuseId = 14;
 }

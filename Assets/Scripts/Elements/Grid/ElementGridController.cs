@@ -109,7 +109,7 @@ public class ElementGridController : MonoBehaviour
 
     // test method!!!
     public void ChangeElement() {
-        if (Elements.elementsTypes.Count <= elementChoosenTest + 2)
+        if (Elements.elementsTypes.Count <= elementChoosenTest + 1)
         {
             elementChoosenTest = 0;
             return;
@@ -120,7 +120,7 @@ public class ElementGridController : MonoBehaviour
     // test method!!!
     public void ChangeBrush()
     {
-        if (Brushes.brushes.Count <= elementChoosenTest + 2)
+        if (Brushes.brushes.Count <= brushChoosenTest + 1)
         {
             brushChoosenTest = 0;
             return;

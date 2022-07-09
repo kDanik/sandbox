@@ -31,6 +31,8 @@ public class ElementReactions
 
         if (adjacentElement == null) return false;
 
+        if (elementGrid.IsIgnorePosition(adjacentElement.x, adjacentElement.y)) return false;
+
 
 
         // TODO Can this be replaced by object nicely and simply ?
@@ -100,13 +102,21 @@ public class ElementReactions
         // water - burning wood 
         if (centerElement.elementTypeId == Elements.waterId && adjacentElement.elementTypeId == Elements.burningWoodId)
         {
-            ReactionFireWithWater(adjacentElement, centerElement);
+            ReactionBurningWoodWithWater(adjacentElement, centerElement);
             return true;
         }
 
         if (centerElement.elementTypeId == Elements.burningWoodId && adjacentElement.elementTypeId == Elements.waterId)
         {
-            ReactionFireWithWater(centerElement, adjacentElement);
+            ReactionBurningWoodWithWater(centerElement, adjacentElement);
+            return true;
+        }
+
+        // fuse - fire
+
+        if (adjacentElement.elementTypeId == Elements.fuseId && centerElement.elementTypeId == Elements.fireId)
+        {
+            ReactionFireWithFuse(adjacentElement);
             return true;
         }
 
@@ -142,5 +152,10 @@ public class ElementReactions
     private void ReactionSteamWithSolid(BaseElement steam)
     {
         TimedActions.AddTimedAction((uint)Random.Range(4, 10), steam);
+    }
+
+    private void ReactionFireWithFuse(BaseElement fuse)
+    {
+        elementGrid.SetElement(fuse.x, fuse.y, new Fire());
     }
 }
