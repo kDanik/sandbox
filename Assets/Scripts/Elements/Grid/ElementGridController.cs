@@ -22,6 +22,9 @@ public class ElementGridController : MonoBehaviour
     [SerializeField]
     private int brushChoosenTest = 1;
 
+    [SerializeField]
+    private bool replaceElementsWithBrush = true;
+
     private ElementGrid elementGrid;
 
     private ElementSpawner elementSpawner;
@@ -163,7 +166,7 @@ public class ElementGridController : MonoBehaviour
                 elementSpawner.Clear(posInGrid.x, posInGrid.y, new QuadSolidBrush());
             } else
             {
-                elementSpawner.SpawnElement(posInGrid.x, posInGrid.y, Brushes.brushes[brushChoosenTest], Elements.elementsTypes[elementChoosenTest]);
+                elementSpawner.SpawnElement(posInGrid.x, posInGrid.y, Brushes.brushes[brushChoosenTest], Elements.elementsTypes[elementChoosenTest], replaceElementsWithBrush);
             }
         }
     }

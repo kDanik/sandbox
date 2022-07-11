@@ -124,7 +124,7 @@ public class ElementReactions
 
         if (adjacentElement.elementTypeId == Elements.fireId && centerElement.elementTypeId == Elements.glassId)
         {
-            ReactionFireWithGlass(adjacentElement);
+            ReactionFireWithGlass(centerElement);
             return true;
         }
 
