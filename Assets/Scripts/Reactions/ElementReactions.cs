@@ -93,7 +93,7 @@ public class ElementReactions
         }
 
         // steam - solid 
-        if (centerElement.elementTypeId == Elements.steamId && adjacentElement is Solid)
+        if (centerElement.elementTypeId == Elements.steamId && adjacentElement.IsSolid())
         {
             ReactionSteamWithSolid(centerElement);
             return true;
@@ -120,6 +120,34 @@ public class ElementReactions
             return true;
         }
 
+        // glass - fire
+
+        if (adjacentElement.elementTypeId == Elements.fireId && centerElement.elementTypeId == Elements.glassId)
+        {
+            ReactionFireWithGlass(adjacentElement);
+            return true;
+        }
+
+
+        // melted glass - water
+
+        if (adjacentElement.elementTypeId == Elements.meltedGlassId && centerElement.elementTypeId == Elements.waterId)
+        {
+            ReactionWaterWithMeltedGlass(adjacentElement, centerElement);
+            return true;
+        }
+
+
+
+        // sand - fire 
+
+        if (adjacentElement.elementTypeId == Elements.sandId && centerElement.elementTypeId == Elements.fireId)
+        {
+            ReactionSandWithFire(adjacentElement);
+            return true;
+        }
+
+
         return false;
     }
 
@@ -145,7 +173,9 @@ public class ElementReactions
 
     private void ReactionBurningWoodWithWater(BaseElement burningWood, BaseElement water)
     {
-        elementGrid.SetElement(burningWood.x, burningWood.y, new Wood(burningWood.GetColor()));
+        Color32 newWoodColor = ColorUtil.GetDarkerColor(burningWood.GetColor(), 2);
+
+        elementGrid.SetElement(burningWood.x, burningWood.y, new Wood(newWoodColor));
         elementGrid.SetElement(water.x, water.y, new Steam());
     }
 
@@ -157,5 +187,22 @@ public class ElementReactions
     private void ReactionFireWithFuse(BaseElement fuse)
     {
         elementGrid.SetElement(fuse.x, fuse.y, new Fire());
+    }
+
+    private void ReactionFireWithGlass(BaseElement glass)
+    {
+        elementGrid.SetElement(glass.x, glass.y, new MeltedGlass());
+    }
+
+    private void ReactionWaterWithMeltedGlass(BaseElement meltedGlass, BaseElement water)
+    {
+        elementGrid.SetElement(water.x, water.y, new Steam());
+
+        if (Random.Range(1, 5) == 1) elementGrid.SetElement(meltedGlass.x, meltedGlass.y, new Glass());
+    }
+
+    private void ReactionSandWithFire(BaseElement sand)
+    {
+        elementGrid.SetElement(sand.x, sand.y, new MeltedGlass());
     }
 }

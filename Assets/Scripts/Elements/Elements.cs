@@ -20,7 +20,9 @@ public static class Elements
         typeof(BurningWood),
         typeof(Ash),
         typeof(Steam),
-        typeof(Fuse)
+        typeof(Fuse),
+        typeof(MeltedGlass),
+        typeof(Glass)
     };
 
     // element ids (idk how this can be done better :(( 
@@ -38,4 +40,6 @@ public static class Elements
     public const uint ashId = 12;
     public const uint steamId = 13;
     public const uint fuseId = 14;
+    public const uint glassId = 15;
+    public const uint meltedGlassId = 16;
 }
