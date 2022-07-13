@@ -5,7 +5,7 @@ public class BurningWood : Solid
     private int health = Random.Range(5, 20);
 
 
-    public BurningWood() : base(1500, RoomTemperature, CreateRandomBurningWoodColor(), Elements.burningWoodId)
+    public BurningWood() : base(1500, (uint)Random.Range(400, 800), CreateRandomBurningWoodColor(), Elements.burningWoodId)
     {
         TimedActions.AddTimedAction((uint)Random.Range(5, 20), this);
     }
@@ -37,7 +37,10 @@ public class BurningWood : Solid
             return;
         }
 
-        if (health > 5) ChangeElementsColor(elementGrid, ColorUtil.GetDarkerColor(GetColor(), 1.3f));
+        if (health > 5) {
+            ChangeElementsColor(elementGrid, ColorUtil.GetDarkerColor(GetColor(), 1.3f));
+            temperature = (uint)(temperature + 10 * random);
+        } 
 
 
         if (health == 5) ChangeElementsColor(elementGrid, ColorUtil.GetDarkerColor(GetColor(), 2f));

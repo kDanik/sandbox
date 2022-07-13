@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 public class BurningOil : Liquid
 {
-    public BurningOil() : base(850, 1000, CreateRandomBurningOilColor(), Elements.burningOilId)
+    public BurningOil() : base(700, 500, CreateRandomBurningOilColor(), Elements.burningOilId)
     {
         TimedActions.AddTimedAction((uint)Random.Range(5, 20), this);
     }

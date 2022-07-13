@@ -1118,11 +1118,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17c3a06b7795d467a84e61d5f2a7f71a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pixelSizeInUnityUnits: 0.04
-  width: 435
-  height: 225
-  elementChoosenTest: 11
-  brushChoosenTest: 3
+  pixelSizeInUnityUnits: 0.03
+  width: 600
+  height: 300
+  elementChoosenTest: 14
+  brushChoosenTest: 1
+  replaceElementsWithBrush: 1
 --- !u!1 &1989382378
 GameObject:
   m_ObjectHideFlags: 0

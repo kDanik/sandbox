@@ -3,6 +3,7 @@ public class Glass : Solid
 {
     public Glass() : base(3000, RoomTemperature, CreateGlassColor(), Elements.glassId)
     {
+        heatReactionTemperature = 1227;
     }
 
     // if created from melted glass initial color should be color of melted glass, and with time it should change to normal glass color
@@ -19,5 +20,10 @@ public class Glass : Solid
     public override void TimedAction(ElementGrid elementGrid)
     {
         ChangeElementsColor(elementGrid, CreateGlassColor());
+    }
+
+    public override void HeatReaction(BaseElement elementWithHigherTemperature, ElementGrid elementGrid)
+    {
+        elementGrid.SetElement(x, y, new MeltedGlass());
     }
 }

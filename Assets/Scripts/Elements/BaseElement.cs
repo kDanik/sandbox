@@ -47,6 +47,10 @@ public abstract class BaseElement
     
     public const uint RoomTemperature = 293;
 
+    public uint freezeReactionTemperature = 0;
+
+    public uint heatReactionTemperature = 1000000;
+
     public BaseElement(uint weight, uint temperature, Color color, uint elementTypeId, uint elementPhysicsTypeId)
     {
         this.weight = weight;
@@ -56,9 +60,23 @@ public abstract class BaseElement
         this.elementPhysicsTypeId = elementPhysicsTypeId;
     }
 
-    public virtual void TimedAction(ElementGrid elementGrid) {
+    public virtual void TimedAction(ElementGrid elementGrid)
+    {
         throw new NotImplementedException();
     }
+
+
+    public virtual void FreezeReaction(BaseElement elementWithLowerTempreture, ElementGrid elementGrid)
+    {
+        throw new NotImplementedException();
+    }
+
+
+    public virtual void HeatReaction(BaseElement elementWithHigherTempreture, ElementGrid elementGrid)
+    {
+        throw new NotImplementedException();
+    }
+
 
     ///<summary>
     /// Marks element as not on grid, so TimedActions will not execute action for deleted elements

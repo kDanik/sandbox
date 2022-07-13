@@ -2,12 +2,13 @@
 
 public class Wood : Solid
 {
-    public Wood() : base(1500, RoomTemperature, CreateRandomWoodColor(), Elements.woodId)
+    public Wood() : this(CreateRandomWoodColor())
     {
     }
 
     public Wood(Color32 color) : base(1500, RoomTemperature, color, Elements.woodId)
     {
+        heatReactionTemperature = 644;
     }
 
     private static Color32 CreateRandomWoodColor()
@@ -17,5 +18,10 @@ public class Wood : Solid
         byte blue = (byte)Random.Range(35, 65);
 
         return new Color32(red, green, blue, 255);
+    }
+
+    public override void HeatReaction(BaseElement elementWithHigherTempreture, ElementGrid elementGrid)
+    {
+        elementGrid.SetElement(x, y, new BurningWood());
     }
 }

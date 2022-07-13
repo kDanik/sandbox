@@ -2,7 +2,7 @@
 
 public class Steam : Gas
 {
-    public Steam() : base(10f, 1900, CreateRandomSteamColor(), Elements.steamId)
+    public Steam() : base(10f, 300, CreateRandomSteamColor(), Elements.steamId)
     {
     }
 
@@ -17,4 +17,5 @@ public class Steam : Gas
     {
         elementGrid.SetElement(x, y, new Water());
     }
+
 }
