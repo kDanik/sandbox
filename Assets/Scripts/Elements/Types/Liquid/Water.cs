@@ -39,5 +39,11 @@ public class Water : Liquid
             elementGrid.SetElement(elementWithHigherTemperature.x, elementWithHigherTemperature.y, new Wood(newWoodColor));
             return;
         }
+
+        if (elementWithHigherTemperature.elementTypeId.Equals(Elements.burningOilId))
+        {
+            elementGrid.SetElement(elementWithHigherTemperature.x, elementWithHigherTemperature.y, new Fire());
+            return;
+        }
     }
 }

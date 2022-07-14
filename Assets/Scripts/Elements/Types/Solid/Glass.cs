@@ -10,6 +10,7 @@ public class Glass : Solid
     public Glass(MeltedGlass meltedGlass) : base(3000, RoomTemperature, meltedGlass.GetColor(), Elements.glassId)
     {
         TimedActions.AddTimedAction((uint)Random.Range(5, 25), this);
+        heatReactionTemperature = 1227;
     }
 
     private static Color32 CreateGlassColor()

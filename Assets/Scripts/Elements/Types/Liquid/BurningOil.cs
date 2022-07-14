@@ -3,7 +3,7 @@ public class BurningOil : Liquid
 {
     public BurningOil() : base(700, 500, CreateRandomBurningOilColor(), Elements.burningOilId)
     {
-        TimedActions.AddTimedAction((uint)Random.Range(5, 20), this);
+        TimedActions.AddTimedAction((uint)Random.Range(3, 7), this);
     }
 
     private static Color32 CreateRandomBurningOilColor()
