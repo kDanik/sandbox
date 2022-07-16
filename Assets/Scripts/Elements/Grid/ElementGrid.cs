@@ -164,22 +164,26 @@ public class ElementGrid
 
 
     /// <summary>
-    /// if position is in bounds and no other element is assigned for it,  sets element and updates pixel color for it
+    /// if position is in bounds and no other element is assigned for it,  sets element and updates pixel color for it.
+    /// Returns true if element was set successfully
     /// </summary>
-    public void SetElementIfEmpty(int x, int y, BaseElement element)
+    public bool SetElementIfEmpty(int x, int y, BaseElement element)
     {
-        if (IsInBounds(x,y) && elementGrid[x, y] == null)
-        {
-            element.x = x;
-            element.y = y;
+        if (!IsInBounds(x, y) || elementGrid[x, y] != null) return false;
 
-            elementGrid[x, y] = element;
 
-            ignoreThisIteration[x, y] = true;
-            AddSuroundingPositionsToCheckNextIteration(x, y);
+        element.x = x;
+        element.y = y;
 
-            UpdateColorValues(x, y, element);
-        }
+        elementGrid[x, y] = element;
+
+        ignoreThisIteration[x, y] = true;
+        AddSuroundingPositionsToCheckNextIteration(x, y);
+
+        UpdateColorValues(x, y, element);
+
+        return true;
+
     }
 
     /// <summary>

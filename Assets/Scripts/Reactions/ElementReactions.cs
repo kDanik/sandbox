@@ -73,6 +73,17 @@ public class ElementReactions
             return true;
         }
 
+        // replicator
+        if (adjacentElement.elementTypeId == Elements.replicatorId && centerElement.elementTypeId != Elements.replicatorId)
+        {
+            Replicator replicator = adjacentElement as Replicator;
+
+            if (replicator.hasElementToReplicate) return false;
+
+            replicator.SetElementTypeToReplicate(centerElement);
+            return true;
+        }
+
         return false;
     }
 
