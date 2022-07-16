@@ -3,6 +3,8 @@ using UnityEngine;
 
 public abstract class AbstractBrush
 {
+    protected const int extraSmallBrushSize = 1;
+
     protected const int smallBrushSize = 4;
 
     protected const int mediumBrushSize = 7;

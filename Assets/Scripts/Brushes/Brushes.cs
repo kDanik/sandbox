@@ -7,6 +7,8 @@ public static class Brushes
         new QuadSmallRandomisedBrush(),
         new QuadSolidBrush(),
         new QuadBigBrush(),
-        new QuadBigRandomisedBrush()
+        new QuadBigRandomisedBrush(),
+        new PixelBrush(),
+        new QuadExtraSmallBrush()
     };
 }
