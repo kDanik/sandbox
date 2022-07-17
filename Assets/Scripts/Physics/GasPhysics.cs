@@ -8,8 +8,11 @@
         this.elementGrid = elementGrid;
     }
 
-    public void Simulate(int x, int y, Gas gas)
+    public void Simulate(Gas gas)
     {
+        int x = gas.x;
+        int y = gas.y;
+
         // get alls available positions and their weights
         var weightedAvailablePostions = GetWeightedAvailablePositions(x, y, gas);
 

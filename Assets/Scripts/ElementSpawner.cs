@@ -29,7 +29,7 @@ public class ElementSpawner
             {
                 elementGrid.SetElementIfEmpty(position.x, position.y, Activator.CreateInstance(elementType) as BaseElement);
             }
-           
+
         }
     }
 

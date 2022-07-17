@@ -11,6 +11,10 @@ public class ElementPhysics : MonoBehaviour
 
     private GasPhysics gasPhysics;
 
+
+    /// <summary>
+    /// Initialises ElementPhysics. Maybe this can be replaced with constructor if we remove MonoBehaviour
+    /// </summary>
     public void InitElementPhysics(ElementGrid elementGrid)
     {
         this.elementGrid = elementGrid;
@@ -20,25 +24,29 @@ public class ElementPhysics : MonoBehaviour
         gasPhysics = new GasPhysics(elementGrid);
     }
 
-    public void SimulateElementPhysics(int x, int y, BaseElement element)
+    /// <summary>
+    /// Simulates physics for element depending on its type.
+    /// </summary>
+    /// <param name="element">element for which physics should be simulated</param>
+    public void SimulateElementPhysics(BaseElement element)
     {
-        if (elementGrid.IsIgnorePosition(x, y) || element == null || element.IsSolid()) return;
+        if (element == null || element.IsSolid() || elementGrid.IsIgnorePosition(element.x, element.y)) return;
 
         if (element.IsGranular())
         {
-            granularPhysics.Simulate(x, y);
+            granularPhysics.Simulate(element);
             return;
         }
 
         if (element is Liquid liquidElement)
         {
-            liquidPhysics.Simulate(x, y, liquidElement);
+            liquidPhysics.Simulate(liquidElement);
             return;
         }
 
         if (element is Gas gas)
         {
-            gasPhysics.Simulate(x, y, gas);
+            gasPhysics.Simulate(gas);
 
             return;
         }

@@ -36,6 +36,64 @@ public class ElementReactions
 
         // heat reactions
 
+        if (CheckHeatReaction(centerElement, adjacentElement)) return true;
+
+        // freeze reactions
+
+        if (CheckFreezeReaction(centerElement, adjacentElement)) return true;
+
+
+        
+        // steam - solid 
+        if (centerElement.elementTypeId == Elements.steamId && adjacentElement.IsSolid())
+        {
+            ReactionSteamWithSolid(centerElement);
+
+            return true;
+        }
+
+        // replicator
+        if (adjacentElement.elementTypeId == Elements.replicatorId && centerElement.elementTypeId != Elements.replicatorId)
+        {
+            Replicator replicator = adjacentElement as Replicator;
+
+            return ReactionWithReplicator(replicator, centerElement);
+        }
+
+        // void
+        if (adjacentElement.elementTypeId == Elements.voidId && centerElement.elementTypeId != Elements.voidId)
+        {
+            ReactionWithVoid(centerElement);
+
+            return true;
+        }
+
+        return false;
+    }
+
+
+    private void ReactionSteamWithSolid(BaseElement steam)
+    {
+        TimedActions.AddTimedAction((uint)Random.Range(4, 10), steam);
+    }
+
+
+    private void ReactionWithVoid(BaseElement collidingElement)
+    {
+        elementGrid.SetElement(collidingElement.x, collidingElement.y, null);
+    }
+
+
+    private bool ReactionWithReplicator(Replicator replicator, BaseElement otherElement)
+    {
+        if (replicator.hasElementToReplicate) return false;
+
+        replicator.SetElementTypeToReplicate(otherElement);
+        return true;
+    }
+
+
+    private bool CheckHeatReaction(BaseElement centerElement, BaseElement adjacentElement) {
         if (centerElement.heatReactionTemperature < adjacentElement.temperature)
         {
             centerElement.HeatReaction(adjacentElement, elementGrid);
@@ -50,7 +108,11 @@ public class ElementReactions
             return true;
         }
 
-        // freeze reactions
+        return false;
+    }
+
+    private bool CheckFreezeReaction(BaseElement centerElement, BaseElement adjacentElement)
+    {
 
         if (centerElement.freezeReactionTemperature > adjacentElement.temperature)
         {
@@ -66,37 +128,6 @@ public class ElementReactions
             return true;
         }
 
-        // steam - solid 
-        if (centerElement.elementTypeId == Elements.steamId && adjacentElement.IsSolid())
-        {
-            ReactionSteamWithSolid(centerElement);
-            return true;
-        }
-
-        // replicator
-        if (adjacentElement.elementTypeId == Elements.replicatorId && centerElement.elementTypeId != Elements.replicatorId)
-        {
-            Replicator replicator = adjacentElement as Replicator;
-
-            if (replicator.hasElementToReplicate) return false;
-
-            replicator.SetElementTypeToReplicate(centerElement);
-            return true;
-        }
-
-        // void
-        if (adjacentElement.elementTypeId == Elements.voidId && centerElement.elementTypeId != Elements.voidId)
-        {
-            elementGrid.SetElement(centerElement.x, centerElement.y, null); 
-            return true;
-        }
-
         return false;
     }
-
-    private void ReactionSteamWithSolid(BaseElement steam)
-    {
-        TimedActions.AddTimedAction((uint)Random.Range(4, 10), steam);
-    }
-
 }

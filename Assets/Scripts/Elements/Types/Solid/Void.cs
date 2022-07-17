@@ -1,8 +1,6 @@
 ﻿using UnityEngine;
 public class Void : Solid
 {
-
-
     public Void() : base(3000, RoomTemperature, CreateVoidColor(), Elements.voidId)
     {
     }

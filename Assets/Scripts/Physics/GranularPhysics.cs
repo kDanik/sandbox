@@ -18,8 +18,11 @@ public class GranularPhysics
         this.elementGrid = elementGrid;
     }
 
-    public void Simulate(int x, int y)
+    public void Simulate(BaseElement granularElement)
     {
+        int x = granularElement.x;
+        int y = granularElement.y;
+
         TrySwapWithBottomElement(ref x, ref y);
 
         TrySwapWithBottomElement(ref x, ref y);

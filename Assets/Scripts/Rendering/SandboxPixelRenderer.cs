@@ -37,6 +37,7 @@ public class SandboxPixelRenderer : MonoBehaviour
         renderObject.transform.position = new Vector3(width * pixelSizeInUnityUnits / 2 - pixelSizeInUnityUnits / 2, height * pixelSizeInUnityUnits / 2 - pixelSizeInUnityUnits / 2, 1);
         renderObject.GetComponent<Renderer>().material.mainTexture = texture;
 
+        // set all pixels to transparent color
         ClearAllPixels();
     }
 

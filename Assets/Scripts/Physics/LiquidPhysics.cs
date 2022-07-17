@@ -8,8 +8,12 @@
         this.elementGrid = elementGrid;
     }
 
-    public void Simulate(int x, int y, Liquid element)
+    public void Simulate(Liquid element)
     {
+        int x = element.x;
+        int y = element.y;
+
+
         if (TrySwapWithBottomElement(ref x, ref y, element) && TrySwapWithBottomElement(ref x, ref y, element)) return;
 
         SimulateLiquidFlow(x, y, element);

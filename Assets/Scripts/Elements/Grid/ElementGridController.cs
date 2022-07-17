@@ -75,7 +75,7 @@ public class ElementGridController : MonoBehaviour
 
                     elementReactions.CheckReactions(x, y, element);
 
-                    elementPhysics.SimulateElementPhysics(x, y, element);
+                    elementPhysics.SimulateElementPhysics(element);
                 }
             }
         }
@@ -93,7 +93,7 @@ public class ElementGridController : MonoBehaviour
 
                     elementReactions.CheckReactions(x, y, element);
 
-                    elementPhysics.SimulateElementPhysics(x, y, element);
+                    elementPhysics.SimulateElementPhysics(element);
                 }
             }
         }
