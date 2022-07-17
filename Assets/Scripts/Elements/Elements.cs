@@ -23,7 +23,8 @@ public static class Elements
         typeof(Fuse),
         typeof(MeltedGlass),
         typeof(Glass),
-        typeof(Replicator)
+        typeof(Replicator),
+        typeof(Void)
     };
 
     // element ids (idk how this can be done better :(( 
@@ -44,4 +45,5 @@ public static class Elements
     public const uint glassId = 15;
     public const uint meltedGlassId = 16;
     public const uint replicatorId = 17;
+    public const uint voidId = 18;
 }

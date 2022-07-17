@@ -84,6 +84,13 @@ public class ElementReactions
             return true;
         }
 
+        // void
+        if (adjacentElement.elementTypeId == Elements.voidId && centerElement.elementTypeId != Elements.voidId)
+        {
+            elementGrid.SetElement(centerElement.x, centerElement.y, null); 
+            return true;
+        }
+
         return false;
     }
 
