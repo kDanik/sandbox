@@ -2,10 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GranularPhysics
+public sealed class GranularPhysics : AbstractElementPhysics
 {
-    private ElementGrid elementGrid;
-
     // true value is for left direction, false is for right direction
     private static readonly bool directionLeft = true;
 
@@ -18,17 +16,17 @@ public class GranularPhysics
         this.elementGrid = elementGrid;
     }
 
-    public void Simulate(BaseElement granularElement)
+    public override void Simulate(BaseElement granularElement)
     {
         int x = granularElement.x;
         int y = granularElement.y;
 
-        TrySwapWithBottomElement(ref x, ref y);
+        TrySwapWithBottomElement(ref x, ref y, granularElement);
 
-        TrySwapWithBottomElement(ref x, ref y);
+        TrySwapWithBottomElement(ref x, ref y, granularElement);
 
 
-        if (GetElementInfo(x, y - 1).isSwappable) return;
+        if (GetElementSwapInfo(x, y - 1, granularElement).isSwappable) return;
 
 
         // direction decides which side (left or right) will be checked first for physics calculation.
@@ -36,17 +34,17 @@ public class GranularPhysics
         {
             SwitchDirection();
 
-            if (TrySwapWithBottomLeftElement(ref x,ref y) && TrySwapWithBottomLeftElement(ref x, ref y)) return;
+            if (TrySwapWithBottomLeftElement(ref x,ref y, granularElement) && TrySwapWithBottomLeftElement(ref x, ref y, granularElement)) return;
 
-            if (TrySwapWithBottomRightElement(ref x, ref y)) return;
+            if (TrySwapWithBottomRightElement(ref x, ref y, granularElement)) return;
         }
         else
         {
             SwitchDirection();
 
-            if (TrySwapWithBottomRightElement(ref x,ref y) && TrySwapWithBottomRightElement(ref x, ref y)) return;
+            if (TrySwapWithBottomRightElement(ref x,ref y, granularElement) && TrySwapWithBottomRightElement(ref x, ref y, granularElement)) return;
 
-            if (TrySwapWithBottomLeftElement(ref x, ref y)) return;
+            if (TrySwapWithBottomLeftElement(ref x, ref y, granularElement)) return;
         }
     }
 
@@ -59,16 +57,16 @@ public class GranularPhysics
 
     // Tries to swap with bottom element
     // on success updates position (x, y) and returns true
-    private bool TrySwapWithBottomElement(ref int x, ref int y)
+    private bool TrySwapWithBottomElement(ref int x, ref int y, BaseElement granular)
     {
-        ElementInfo bottomElementInfo = GetElementInfo(x, y - 1);
+        ElementSwapInfo bottomElementInfo = GetElementSwapInfo(x, y - 1, granular);
 
         if (!bottomElementInfo.isSwappable) return false;
 
 
         // tries to move liquid or gas to the side instead of swapping with it
         // makes granular materials that fall on liquids or gas act a little more natural
-        if (bottomElementInfo.isLiquidOrGas)
+        if (bottomElementInfo.isLiquid || bottomElementInfo.isGas)
         {
             if (direction.Equals(directionLeft))
             {
@@ -112,19 +110,19 @@ public class GranularPhysics
 
     // Tries to swap with bottom left element
     // on success updates position (x, y) and returns true
-    private bool TrySwapWithBottomLeftElement(ref int x, ref int y)
+    private bool TrySwapWithBottomLeftElement(ref int x, ref int y, BaseElement granular)
     {
-        ElementInfo bottomLeftElementInfo = GetElementInfo(x - 1, y - 1);
-        ElementInfo leftElementInfo = GetElementInfo(x - 1, y);
+        ElementSwapInfo bottomLeftElementInfo = GetElementSwapInfo(x - 1, y - 1, granular);
+        ElementSwapInfo leftElementInfo = GetElementSwapInfo(x - 1, y, granular);
 
         if (!bottomLeftElementInfo.isSwappable || !leftElementInfo.isSwappable) return false;
 
         // tries to move liquid or gas to the side instead of swapping with it
         // makes granular materials that fall on liquids or gas act a little more natural
-        if (bottomLeftElementInfo.isLiquidOrGas)
+        if (bottomLeftElementInfo.isLiquid || bottomLeftElementInfo.isGas)
         {
 
-            if (leftElementInfo.isSwappable && !leftElementInfo.isLiquidOrGas)
+            if (leftElementInfo.isLiquid || leftElementInfo.isGas)
             {
                 // swaps liquid element (bottom left) with empty space (left, top)
                 elementGrid.SwapElements(x - 1, y - 1, x - 1, y);
@@ -149,20 +147,20 @@ public class GranularPhysics
 
     // Tries to swap with bottom right element
     // on success updates position (x, y) and returns true
-    private bool TrySwapWithBottomRightElement(ref int x, ref int y)
+    private bool TrySwapWithBottomRightElement(ref int x, ref int y, BaseElement granular)
     {
-        ElementInfo bottomRightElementInfo = GetElementInfo(x + 1, y - 1);
-        ElementInfo rightElementInfo = GetElementInfo(x + 1, y);
+        ElementSwapInfo bottomRightElementInfo = GetElementSwapInfo(x + 1, y - 1, granular);
+        ElementSwapInfo rightElementInfo = GetElementSwapInfo(x + 1, y, granular);
 
         if (!bottomRightElementInfo.isSwappable || !rightElementInfo.isSwappable) return false;
 
 
         // tries to move liquid or gas to the side instead of swapping with it
         // makes granular materials that fall on liquids or gas act a little more natural
-        if (bottomRightElementInfo.isLiquidOrGas)
+        if (bottomRightElementInfo.isLiquid || bottomRightElementInfo.isGas)
         {
-          
-            if (rightElementInfo.isSwappable && !rightElementInfo.isLiquidOrGas)
+
+            if (rightElementInfo.isLiquid || rightElementInfo.isGas)
             {
                 // swaps liquid element (bottom right) with empty space (right, top)
                 elementGrid.SwapElements(x + 1, y - 1, x + 1, y);
@@ -177,61 +175,10 @@ public class GranularPhysics
             }
         }
 
-
         elementGrid.SwapElements(x, y, x + 1, y - 1);
         y--;
         x++;
 
         return true;
-    }
-
-
-
-    struct ElementInfo
-    {
-        public bool isSwappable;  // for granular material swappable elements would be liquids and gasses or empty space
-        public bool isLiquidOrGas;
-    }
-
-    // get ElementInfo for given position
-    private ElementInfo GetElementInfo(int x, int y)
-    {
-        ElementInfo elementInfo;
-
-        // if not in bounds then position is not swappable
-        if (!elementGrid.IsInBounds(x, y)) {
-            elementInfo.isSwappable = false;
-            elementInfo.isLiquidOrGas = false;
-
-            return elementInfo;
-        }
-
-        BaseElement elementToSwapWith = elementGrid.GetElementUnsafe(x, y);
-
-        // if in bounds and element is null, then position is free and swapable
-        if (elementToSwapWith == null)
-        {
-            elementInfo.isSwappable = true;
-            elementInfo.isLiquidOrGas = false;
-
-            return elementInfo;
-        }
-
-
-        // if in bounds and element is  not null, but is gas or liquid, then position is swappable
-        if (elementToSwapWith.IsLiquid() || elementToSwapWith.IsGas())
-        {
-            elementInfo.isSwappable = true;
-            elementInfo.isLiquidOrGas = true;
-
-            return elementInfo;
-        }
-        else
-        {
-            elementInfo.isSwappable = false;
-            elementInfo.isLiquidOrGas = false;
-
-            return elementInfo;
-        }
     }
 }

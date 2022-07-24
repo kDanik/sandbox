@@ -1,21 +1,17 @@
 using UnityEngine;
 
-public class ElementPhysics : MonoBehaviour
+public sealed class ElementPhysicsDispatcher
 {
 
-    private ElementGrid elementGrid;
+    private readonly ElementGrid elementGrid;
 
-    private GranularPhysics granularPhysics;
+    private readonly AbstractElementPhysics granularPhysics;
 
-    private LiquidPhysics liquidPhysics;
+    private readonly AbstractElementPhysics liquidPhysics;
 
-    private GasPhysics gasPhysics;
+    private readonly AbstractElementPhysics gasPhysics;
 
-
-    /// <summary>
-    /// Initialises ElementPhysics. Maybe this can be replaced with constructor if we remove MonoBehaviour
-    /// </summary>
-    public void InitElementPhysics(ElementGrid elementGrid)
+    public ElementPhysicsDispatcher(ElementGrid elementGrid)
     {
         this.elementGrid = elementGrid;
 
@@ -36,18 +32,20 @@ public class ElementPhysics : MonoBehaviour
         if (element.IsGranular())
         {
             granularPhysics.Simulate(element);
+
             return;
         }
 
-        if (element is Liquid liquidElement)
+        if (element.IsLiquid())
         {
-            liquidPhysics.Simulate(liquidElement);
+            liquidPhysics.Simulate(element);
+
             return;
         }
 
-        if (element is Gas gas)
+        if (element.IsGas())
         {
-            gasPhysics.Simulate(gas);
+            gasPhysics.Simulate(element);
 
             return;
         }

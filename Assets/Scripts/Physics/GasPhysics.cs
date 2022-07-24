@@ -1,15 +1,16 @@
-﻿public class GasPhysics
+﻿using UnityEngine;
+
+public sealed class GasPhysics : AbstractElementPhysics
 {
-    private ElementGrid elementGrid;
-
-
     public GasPhysics(ElementGrid elementGrid)
     {
         this.elementGrid = elementGrid;
     }
 
-    public void Simulate(Gas gas)
+    public override void Simulate(BaseElement element)
     {
+        Gas gas = (Gas)element;
+
         int x = gas.x;
         int y = gas.y;
 
@@ -35,18 +36,17 @@
 
 
         // get information about all surrounding elements 
-        var topElementInfo = GetElementInfo(x, y + 1);
-        var bottomElementInfo = GetElementInfo(x, y - 1);
+        var topElementInfo = GetElementSwapInfo(x, y + 1, gas);
+        var bottomElementInfo = GetElementSwapInfo(x, y - 1, gas);
 
-        var topLeftElementInfo = GetElementInfo(x - 1, y + 1);
-        var bottomRightElementInfo = GetElementInfo(x + 1, y - 1);
+        var topLeftElementInfo = GetElementSwapInfo(x - 1, y + 1, gas);
+        var bottomRightElementInfo = GetElementSwapInfo(x + 1, y - 1, gas);
 
-        var topRightElementInfo = GetElementInfo(x + 1, y + 1);
-        var bottomLeftElementInfo = GetElementInfo(x - 1, y - 1);
+        var topRightElementInfo = GetElementSwapInfo(x + 1, y + 1, gas);
+        var bottomLeftElementInfo = GetElementSwapInfo(x - 1, y - 1, gas);
 
-        var rightElementInfo = GetElementInfo(x + 1, y);
-        var leftElementInfo = GetElementInfo(x - 1, y);
-
+        var rightElementInfo = GetElementSwapInfo(x + 1, y, gas);
+        var leftElementInfo = GetElementSwapInfo(x - 1, y, gas);
 
 
         // top 
@@ -72,6 +72,7 @@
             // if position has element of type gas,
             // current gas will have more chance to go on oposite position
             // (top element is gas --> more chance for current element to go down)
+  
             weightedOptions[1, 2] += 10;
         }
 
@@ -206,52 +207,5 @@
             weightedOptions[2, 0] += 10;
         }
         return weightedOptions;
-    }
-
-
-    struct ElementInfo
-    {
-        public bool isSwappable;
-        public bool isGas;
-    }
-
-    // get ElementInfo for given position
-    private ElementInfo GetElementInfo(int x, int y)
-    {
-        ElementInfo elementInfo;
-
-        // if not in bounds then position is not swappable
-        if (!elementGrid.IsInBounds(x, y))
-        {
-            elementInfo.isSwappable = false;
-            elementInfo.isGas = false;
-
-            return elementInfo;
-        }
-
-        BaseElement elementToSwapWith = elementGrid.GetElementUnsafe(x, y);
-
-        // if in bounds and element is null, then position is free and swapable
-        if (elementToSwapWith == null)
-        {
-            elementInfo.isSwappable = true;
-            elementInfo.isGas = false;
-
-            return elementInfo;
-        }
-
-        if (elementToSwapWith.IsGas())
-        {
-            elementInfo.isSwappable = false;
-            elementInfo.isGas = true;
-
-            return elementInfo;
-        }
-
-        elementInfo.isSwappable = false;
-        elementInfo.isGas = false;
-
-        return elementInfo;
-        
     }
 }

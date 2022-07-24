@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 public class ElementGridController : MonoBehaviour
 {
     private SandboxPixelRenderer sandboxPixelRenderer;
-    private ElementPhysics elementPhysics;
+    private ElementPhysicsDispatcher elementPhysicsDispatcher;
     private ElementReactions elementReactions;
 
     [SerializeField]
@@ -38,8 +38,7 @@ public class ElementGridController : MonoBehaviour
 
         elementGrid = new ElementGrid(width, height, sandboxPixelRenderer);
 
-        elementPhysics = this.gameObject.GetComponent<ElementPhysics>();
-        elementPhysics.InitElementPhysics(elementGrid);
+        elementPhysicsDispatcher = new ElementPhysicsDispatcher(elementGrid);
 
         elementReactions = new ElementReactions(elementGrid);
 
@@ -75,7 +74,7 @@ public class ElementGridController : MonoBehaviour
 
                     elementReactions.CheckReactions(x, y, element);
 
-                    elementPhysics.SimulateElementPhysics(element);
+                    elementPhysicsDispatcher.SimulateElementPhysics(element);
                 }
             }
         }
@@ -93,7 +92,7 @@ public class ElementGridController : MonoBehaviour
 
                     elementReactions.CheckReactions(x, y, element);
 
-                    elementPhysics.SimulateElementPhysics(element);
+                    elementPhysicsDispatcher.SimulateElementPhysics(element);
                 }
             }
         }
