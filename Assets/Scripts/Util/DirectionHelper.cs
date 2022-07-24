@@ -1,5 +1,5 @@
 ﻿/// <summary>
-/// Enum for direction used in ElementReactions reactions for which direction is relevant
+/// Enum for direction used in ElementReactions reactions where direction is relevant
 /// </summary>
 public enum DirectionHelper
 {

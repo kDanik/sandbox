@@ -106,8 +106,7 @@ public abstract class BaseElement
     ///</summary>
     public void Destroy(ElementGrid elementGrid)
     {
-        x = -100;
-        y = -100;
+        elementTypeId = Elements.emptySpaceId;
 
         isOnGrid = false;
     }

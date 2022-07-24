@@ -172,8 +172,11 @@ public class ElementGrid
         if (!IsInBounds(x, y) || elementGrid[x, y] != null) return false;
 
 
-        element.x = x;
-        element.y = y;
+        if (element != null)
+        {
+            element.x = x;
+            element.y = y;
+        }
 
         elementGrid[x, y] = element;
 
@@ -191,23 +194,24 @@ public class ElementGrid
     /// </summary>
     public void SetElement(int x, int y, BaseElement element)
     {
-        if (IsInBounds(x, y))
+        if (!IsInBounds(x, y)) return;
+
+        if (element != null)
         {
-            if (element != null) {
-                element.x = x;
-                element.y = y;
-            }
-
-            if (elementGrid[x, y] != null) elementGrid[x, y].Destroy(this);
-
-            elementGrid[x, y] = element;
-
-
-            ignoreThisIteration[x, y] = true;
-            AddSuroundingPositionsToCheckNextIteration(x, y);
-
-            UpdateColorValues(x, y, element);
+            element.x = x;
+            element.y = y;
         }
+
+        if (elementGrid[x, y] != null) elementGrid[x, y].Destroy(this);
+
+        elementGrid[x, y] = element;
+
+
+        ignoreThisIteration[x, y] = true;
+        AddSuroundingPositionsToCheckNextIteration(x, y);
+
+        UpdateColorValues(x, y, element);
+        
     }
 
     /// <summary>

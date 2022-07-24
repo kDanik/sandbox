@@ -27,7 +27,9 @@ public static class Elements
         typeof(Void)
     };
 
-    // element ids (idk how this can be done better :(( 
+    // element ids (idk how this can be done better :((
+
+    public const uint emptySpaceId = 0;
     public const uint waterId = 1;
     public const uint sandId = 2;
     public const uint methaneId = 3;
