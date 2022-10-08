@@ -308,4 +308,14 @@ public class ElementGrid
     {
         return IsInBounds(x, y) && elementGrid[x, y] != null;
     }
+
+    public int GetHeight()
+    {
+        return height;
+    }
+
+    public int GetWidth()
+    {
+        return width;
+    }
 }

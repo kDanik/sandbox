@@ -343,7 +343,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1398234761}
-        m_TargetAssemblyTypeName: ElementGridController, Assembly-CSharp
+        m_TargetAssemblyTypeName: ElementGridManager, Assembly-CSharp
         m_MethodName: ChangeBrush
         m_Mode: 1
         m_Arguments:
@@ -569,7 +569,7 @@ GameObject:
   m_Component:
   - component: {fileID: 650309902}
   m_Layer: 0
-  m_Name: Ui
+  m_Name: UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -862,7 +862,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1398234761}
-        m_TargetAssemblyTypeName: ElementGridController, Assembly-CSharp
+        m_TargetAssemblyTypeName: ElementGridManager, Assembly-CSharp
         m_MethodName: ChangeElement
         m_Mode: 1
         m_Arguments:
@@ -1056,7 +1056,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1398234760}
   - component: {fileID: 1398234759}
-  - component: {fileID: 1398234758}
   - component: {fileID: 1398234761}
   m_Layer: 0
   m_Name: SandboxLogic
@@ -1065,18 +1064,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1398234758
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1398234757}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b56ae5308ff372b4bac3fb135fed8675, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1398234759
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1115,15 +1102,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1398234757}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 17c3a06b7795d467a84e61d5f2a7f71a, type: 3}
+  m_Script: {fileID: 11500000, guid: 0310406bfe2f34a4bbc57cd5693e22f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   pixelSizeInUnityUnits: 0.03
   width: 600
   height: 300
-  elementChoosenTest: 14
-  brushChoosenTest: 1
-  replaceElementsWithBrush: 1
 --- !u!1 &1989382378
 GameObject:
   m_ObjectHideFlags: 0
