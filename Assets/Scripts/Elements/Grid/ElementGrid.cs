@@ -154,8 +154,9 @@ public class ElementGrid
     }
 
     /// <returns>
-    /// UNSAFE version of GetElement. Will NOT check if position is in bounds. Should be ONLY used if position are checked before
-    /// returns element for given position,
+    /// UNSAFE version of GetElement. Will NOT check if position is in bounds. Should be ONLY used if position are checked before.
+    /// Unsafe get is much more performant than normal get.
+    /// Returns element for given position,
     /// </returns>
     public BaseElement GetElementUnsafe(int x, int y)
     {

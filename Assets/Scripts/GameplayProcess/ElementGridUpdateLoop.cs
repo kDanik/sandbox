@@ -30,9 +30,7 @@ public class ElementGridUpdateLoop
 
         timedActions.CheckTimedActions();
 
-
         SimulateElementsReactionsAndPhysics();
-
 
         userInput.CheckUserInput();
 
@@ -45,38 +43,56 @@ public class ElementGridUpdateLoop
     {
         int randomCheckDirection = Random.Range(0, 2);
 
+        int width = elementGrid.GetWidth();
+        int height = elementGrid.GetHeight();
+
         if (randomCheckDirection == 1)
         {
-            for (int y = 0; y < elementGrid.GetHeight(); y++)
+            for (int y = 0; y < height; y++)
             {
-                for (int x = 0; x < elementGrid.GetWidth(); x++)
+                for (int x = 0; x < width; x++)
                 {
-                    SimulateElementReactionsAndPhysics(x, y);
+                    // yes, this method could be more beautiful and splitted into separate methods
+                    // but making 38000000 extra calles per fixed update and minus 200 fps will make you reconsider
+                    // this has to be so ugly due to performance limitations
+
+                    // TODO maybe this still can be optimized by only iterating some sort of list of checkThisIteration,
+                    // instead of going through all positions and checking if they are in checkThisIteration.
+                    //
+                    // maybe checkThisIteration could be 2 dimentional list with coordinates.
+                    // problem with that would be keeping this list ordered, depending on x,y , to keep same looking physics
+                    // (and keeping it ordered can be big performance problem)
+
+                    if (!elementGrid.checkThisIteration[x, y]) continue;
+
+                    BaseElement element = elementGrid.GetElementUnsafe(x, y);
+
+                    if (element == null) continue;
+
+                    elementReactions.CheckReactions(x, y, element);
+
+                    elementPhysicsDispatcher.SimulateElementPhysics(element);
                 }
             }
         }
         else
         {
-            for (int y = 0; y < elementGrid.GetHeight(); y++)
+            for (int y = 0; y < height; y++)
             {
-                for (int x = elementGrid.GetWidth() - 1; x >= 0; x--)
+                for (int x = width - 1; x >= 0; x--)
                 {
-                    SimulateElementReactionsAndPhysics(x, y);
+                    if (!elementGrid.checkThisIteration[x, y]) continue;
+
+                    BaseElement element = elementGrid.GetElementUnsafe(x, y);
+
+                    if (element == null) continue;
+
+                    elementReactions.CheckReactions(x, y, element);
+
+                    elementPhysicsDispatcher.SimulateElementPhysics(element);
                 }
             }
         }
     }
 
-    private void SimulateElementReactionsAndPhysics(int x, int y)
-    {
-        if (!elementGrid.checkThisIteration[x, y]) return;
-
-        BaseElement element = elementGrid.GetElementUnsafe(x, y);
-
-        if (element == null) return;
-
-        elementReactions.CheckReactions(x, y, element);
-
-        elementPhysicsDispatcher.SimulateElementPhysics(element);
-    }
 }

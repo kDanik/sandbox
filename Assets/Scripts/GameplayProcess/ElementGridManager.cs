@@ -54,9 +54,15 @@ public class ElementGridManager : MonoBehaviour
 
         elementGridUpdateLoop = new ElementGridUpdateLoop(elementGrid, timedActions, sandboxPixelRenderer, elementPhysicsDispatcher, elementReactions, userInput);
 
+
+        // file util (work in progress)
+        gameObject.GetComponent<ElementGridFileUtil>().LoadElementGridFromFile(elementGrid);
+        // this should be called to prevent all loaded elements to be ignore next fixed update (because of load order)
+        elementGrid.ClearIgnoreThisIterationPositionsList();
+
+
         sandboxPixelRenderer.ApplyCurrentChangesToTexture();
     }
-
 
     public void FixedUpdate()
     {
@@ -82,5 +88,10 @@ public class ElementGridManager : MonoBehaviour
             return;
         }
         choosenBrushAndElement.brushChoosen++;
+    }
+
+    public void SaveScene()
+    {
+        gameObject.GetComponent<ElementGridFileUtil>().SaveElementGridToFile(elementGrid);
     }
 }

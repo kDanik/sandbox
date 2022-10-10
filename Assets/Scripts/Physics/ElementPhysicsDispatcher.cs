@@ -25,9 +25,8 @@ public sealed class ElementPhysicsDispatcher
     /// </summary>
     /// <param name="element">element for which physics should be simulated</param>
     public void SimulateElementPhysics(BaseElement element)
-    { 
+    {
         if (element == null || element.IsSolid()  || elementGrid.IsIgnorePosition(element.x, element.y)) return;
-        
 
         if (element.IsGranular())
         {
